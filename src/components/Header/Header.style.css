@@ -1,0 +1,43 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.appTitle {
+    display: flex;
+    align-items: center;
+    margin: 20px 30px 20px;
+}
+.appTitle > img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.appTitle > div {
+    font-weight: 600;
+    font-size: 20px;
+}
+.headerContainer {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+}
+.searchInput > input{
+    height: 40px;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+}
+.searchInput {
+    width: 500px;
+    margin-left: -600px;
+}
+.customBellIcon {
+    margin-right: 30px;
+}
+.customSearchInput {
+    background-color: rgb(236, 236, 236);
+    border-radius: 12px;
+}
