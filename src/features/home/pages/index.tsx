@@ -8,10 +8,12 @@ interface IHomePageProps {}
 
 const HomePage: React.FunctionComponent<IHomePageProps> = () => {
   return <>
-    <Header />
+    {/* <Header />
     <div className="mainLayout">
       <Menu />
-      <div className="cartItemWrapper">
+      
+    </div> */}
+    <div className="cartItemWrapper">
         <div className="cartItemMainPage">
           <PersonalCart />
           <PersonalCart />
@@ -26,8 +28,6 @@ const HomePage: React.FunctionComponent<IHomePageProps> = () => {
           </svg>
         </div>
       </div>
-    </div>
-    
   </>;
 };
 
