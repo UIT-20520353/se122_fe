@@ -1,12 +1,23 @@
 import React from "react";
 import avatarImage from "../../assets/images/avt.jpg";
 import "./PersonalCart.style.css";
+import MatchRequestButtonGroup from "../../features/matching/pages/MatchRequestButtonGroup";
+import MatchedButtonGroup from "../../features/matched/pages/MatchedButtonGroup";
 
-interface IPersonalCart {}
+interface IPersonalCart {
+  pageId: string;
+}
 
-const PersonalCart: React.FunctionComponent<IPersonalCart> = () => {
+const PersonalCart: React.FunctionComponent<IPersonalCart> = ({pageId}) => {
   return (
     <div className="personalCartContainer">
+      {pageId==="matched"?
+        <div className="customEscBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16">
+            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+          </svg>
+        </div> : <></>
+      }
       <div className="personalCartContainerTop">
         <img src={avatarImage} alt="avatar" className="avt"/>
         <div className="personalCartContainerTopContent">
@@ -14,7 +25,7 @@ const PersonalCart: React.FunctionComponent<IPersonalCart> = () => {
           <div className="personalCartDetailsContainer">
             <div className="personalCartDetails">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-gender-female" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 1a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM3 5a5 5 0 1 1 5.5 4.975V12h2a.5.5 0 0 1 0 1h-2v2.5a.5.5 0 0 1-1 0V13h-2a.5.5 0 0 1 0-1h2V9.975A5 5 0 0 1 3 5z"/>
+                <path fillRule="evenodd" d="M8 1a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM3 5a5 5 0 1 1 5.5 4.975V12h2a.5.5 0 0 1 0 1h-2v2.5a.5.5 0 0 1-1 0V13h-2a.5.5 0 0 1 0-1h2V9.975A5 5 0 0 1 3 5z"/>
               </svg>
               <div>Male</div>
             </div>
@@ -63,10 +74,13 @@ const PersonalCart: React.FunctionComponent<IPersonalCart> = () => {
       <p className="personalCartDescription">
         It is a long established fact that a reader will be distracted by the
         readable content of a page when looking at its layout. Many desktop
-        publishing packages and web page editors now use Lorem Ipsum as ...
+        publishing packages and web page editors now use Lorem Ipsum as
       </p>
-      <button type="button" className="customMatchBtn">Match</button>
-      
+      {
+        pageId==="home" ? <button type="button" className="customMatchBtn">Match</button> : 
+        pageId==="matched" ?  <MatchedButtonGroup /> :
+        <MatchRequestButtonGroup />
+      }
     </div>
   );
 };

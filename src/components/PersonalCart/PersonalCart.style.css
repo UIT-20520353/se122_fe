@@ -90,3 +90,9 @@
     cursor: pointer;
     transition: all 0.3s;
 }
+.customEscBtn {
+    float: right;
+    border-radius: 50%;
+    color: #F41313;
+    border: 1px solid #F41313;
+}
