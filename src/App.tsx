@@ -6,6 +6,7 @@ import MainLayout from "./components/layouts/MainLayout";
 import ProfilePage from "./features/profile/pages";
 import Matching from "./features/matching/pages";
 import CalendarPage from "./features/calendar/pages";
+import Matched from "./features/matched/pages";
 
 interface IAppProps {}
 
