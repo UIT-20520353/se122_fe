@@ -8,7 +8,6 @@ interface MatchingProps {}
 const Matching: React.FunctionComponent<MatchingProps> = () => {
   const [isMatching, setIsMatching] = useState<boolean>(true);
 
-
   return <div className="matching-page">
     <div className="matchingTitle">Matching Center</div>
     <div className="matchBtnGroup">
