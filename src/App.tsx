@@ -7,6 +7,8 @@ import ProfilePage from "./features/profile/pages";
 import Matching from "./features/matching/pages";
 import CalendarPage from "./features/calendar/pages";
 import Matched from "./features/matched/pages";
+import Login from "./features/login/pages";
+import Register from "./features/register/pages";
 
 interface IAppProps {}
 
@@ -14,6 +16,8 @@ const App: React.FunctionComponent<IAppProps> = () => {
   return (
     <React.Fragment>
       <Routes>
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Register />} />
         <Route path={"/"} element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="profile" element={<ProfilePage />} />
