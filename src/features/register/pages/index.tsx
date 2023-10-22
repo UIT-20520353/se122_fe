@@ -10,8 +10,12 @@ const Register: React.FunctionComponent<IRegisterProps> = () => {
     <div className="login-page">
       <div className="loginWrapper">
         <h3>Welcome!</h3>
-        <h1>Sign in to</h1>
+        <h1>Sign up to</h1>
         <p>IELTs Tinder?</p>
+        <div className="loginInput">
+          <label htmlFor="email">Email</label> <br/>
+          <input type="text" aria-label="email" id="email" placeholder="Enter your email"/>
+        </div>
         <div className="loginInput">
           <label htmlFor="username">Username</label> <br/>
           <input type="text" aria-label="username" id="username" placeholder="Enter your username"/>
@@ -20,17 +24,15 @@ const Register: React.FunctionComponent<IRegisterProps> = () => {
           <label htmlFor="password">Password</label> <br/>
           <input type="password" aria-label="password" id="password" placeholder="Enter your password"/>
         </div>
-        <div className="othersWrapper">
-          <div>
-            <input type="checkbox" name="remember" id="remember" />
-            <label htmlFor="remember">Remember me</label>
-          </div>
-          <NavLink to="#">Forgot password?</NavLink>
+        <div className="loginInput">
+          <label htmlFor="confirm">Confirm password</label> <br/>
+          <input type="confirm" aria-label="confirm" id="confirm" placeholder="Confirm your password"/>
         </div>
-        <button className="loginBtn">Login</button>    
+        
+        <button className="loginBtn">Sign up</button>    
         <div className="bottomLogin">
-          <p>Don't have an Account?</p>
-          <NavLink to="/signup">Register</NavLink>
+          <p>Already have an account?</p>
+          <NavLink to="/login">Login</NavLink>
         </div>
       </div>
       <img src={bg} alt="background" />
