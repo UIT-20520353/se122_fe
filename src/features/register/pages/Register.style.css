@@ -1,12 +1,12 @@
 * {
     text-decoration: none;
 }
-.login-page {
+.signup-page {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.loginWrapper {
+.signupWrapper {
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 20px;
@@ -14,18 +14,18 @@
     width: 500px;
     height: 660px;
 }
-.loginWrapper > h1 {
+.signupWrapper > h1 {
     margin-top: 15px;
 }
-.loginWrapper > p{
+.signupWrapper > p{
     margin-bottom: 15px;
     font-weight: 500;
 }
-.loginInput {
+.signupInput {
     margin-bottom: 10px;
     font-weight: 500;
 }
-.loginInput > input {
+.signupInput > input {
     width: 100%;
     padding: 16px;
     border: 1px solid #ccc;
@@ -36,7 +36,7 @@
     display: flex;
     justify-content: space-between;
 }
-.loginBtn {
+.signupBtn {
     margin-top: 20px;
     width: 100%;
     background-color: #030575;
@@ -44,11 +44,11 @@
     height: 45px;
     border-radius: 5px;
 }
-.bottomLogin{
+.bottomSignup{
     display: flex;
     justify-content: center;
     margin-top: 30px;
 }
-.bottomLogin > p {
+.bottomSignup > p {
     margin-right: 10px;
 }
