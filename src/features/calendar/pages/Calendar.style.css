@@ -13,3 +13,27 @@
 .btnAdd:hover{
     opacity: 0.8;
 }
+.meetingOverview {
+    display: flex;
+}
+.newMeetingInput {
+    width: 300px;
+    height: 40px;
+    border-radius: 20px;
+    padding-left: 20px;
+    border: 1px solid #ccc;
+}
+.newMeetingInput:focus {
+    border: 1px solid #ccc;
+    background-color: #eee;
+}
+.newMeetingBtn {
+    width: 80px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: rgba(0, 0, 255, 0.632);
+    border: 0;
+    color: #fff;
+    margin-left: 10px;
+    margin-top: 10px;
+}

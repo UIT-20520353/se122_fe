@@ -1,7 +1,5 @@
 import React from "react";
 import PersonalCart from "../../../components/PersonalCart/PersonalCart";
-import Header from "../../../components/Header/Header";
-import Menu from "../../../components/Menu/Menu";
 import "./Homepage.style.css";
 
 interface IHomePageProps {}
