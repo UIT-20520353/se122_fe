@@ -6,7 +6,6 @@ import MainLayout from "./components/layouts/MainLayout";
 import ProfilePage from "./features/profile/pages";
 import Matching from "./features/matching/pages";
 import CalendarPage from "./features/calendar/pages";
-import Matched from "./features/matched/pages";
 import Login from "./features/login/pages";
 import Register from "./features/register/pages";
 import Calling from "./features/calling/pages";
