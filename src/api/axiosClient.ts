@@ -5,7 +5,7 @@ import AxiosResponseData from "../models/axios";
 import { isEmptyObject } from "../utils/commonUtils";
 
 const axiosClient = axios.create({
-  baseURL: "",
+  baseURL: "http://localhost:8080",
   headers: {
     "Content-Type": "application/json",
   },
