@@ -9,6 +9,7 @@ import CalendarPage from "./features/calendar/pages";
 import Login from "./features/login/pages";
 import Register from "./features/register/pages";
 import Calling from "./features/calling/pages";
+import Chat from "./features/chat/page";
 
 interface IAppProps {}
 
@@ -24,6 +25,7 @@ const App: React.FunctionComponent<IAppProps> = () => {
           <Route path="profile" element={<ProfilePage />} />
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="matching" element={<Matching />} />
+          <Route path="chat" element={<Chat />} />
         </Route>
         <Route path={"*"} element={<NotFoundPage />} />
       </Routes>

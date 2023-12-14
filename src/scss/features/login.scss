@@ -3,3 +3,25 @@
   margin-left: calc($sidebar-width + 20px);
   width: 100%;
 }
+
+.login-page {
+  width: 100%;
+  min-height: 100vh;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form {
+  width: 500px;
+  height: 600px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: start;
+  // justify-content: center;
+}

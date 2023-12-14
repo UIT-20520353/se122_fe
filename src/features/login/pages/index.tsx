@@ -1,26 +1,43 @@
 import React, { useState } from "react";
 import bg from "../../../assets/images/loginBG.png";
-import "./Login.style.css";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import authApi from "../../../api/authApi";
 import { setLocalStorage } from "../../../utils/localStorage";
 import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "../../../consts/app";
+import { Button, Form, Input } from "antd";
+import { useAppDispatch } from "../../../app/hooks";
+import { updateUserId } from "../../../redux/globalSlice";
+
+interface InputFieldProps {
+  email: string;
+  password: string;
+}
+
+const initialInputField: InputFieldProps = {
+  email: "",
+  password: "",
+};
 
 interface ILoginProps {}
 
 const Login: React.FunctionComponent<ILoginProps> = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [form] = Form.useForm();
 
-  const onSubmit = async () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const onSubmit = async (value: InputFieldProps) => {
+    setIsLoading(true);
     const { ok, body, error } = await authApi.login({
-      email,
-      password,
+      email: value.email,
+      password: value.password,
     });
+    setIsLoading(false);
 
     if (ok && body) {
       setLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_KEY, body.accessToken);
+      dispatch(updateUserId(body.id));
       navigate("/");
       return;
     }
@@ -29,56 +46,47 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
   };
 
   return (
-    <>
-      <div className="login-page">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onSubmit();
+    <div className="login-page">
+      <Form
+        name="login"
+        className="login-form"
+        layout={"vertical"}
+        size={"large"}
+        form={form}
+        onFinish={onSubmit}
+        autoComplete={"off"}
+        initialValues={initialInputField}
+      >
+        <h2>Welcome!</h2>
+        <Form.Item label={"Email"} name={"email"} style={{ margin: 0 }}>
+          <Input placeholder="Enter your email" />
+        </Form.Item>
+        <Form.Item
+          label="Password"
+          name={"password"}
+          style={{
+            margin: 0,
           }}
-          className="loginWrapper"
         >
-          <h3>Welcome!</h3>
-          <h1>Sign in to</h1>
-          <p>IELTs Tinder?</p>
-          <div className="loginInput">
-            <label htmlFor="username">Username</label> <br />
-            <input
-              type="text"
-              id="username"
-              placeholder="Enter your username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="loginInput">
-            <label htmlFor="password">Password</label> <br />
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          {/* <div className="othersWrapper">
-            <div>
-              <input type="checkbox" name="remember" id="remember" />
-              <label htmlFor="remember">Remember me</label>
-            </div>
-            <NavLink to="#">Forgot password?</NavLink>
-          </div> */}
-          <button type="submit" className="loginBtn">
+          <Input.Password placeholder="Enter your password" />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            htmlType={"submit"}
+            className="submit-button"
+            style={{
+              fontWeight: 600,
+              color: "#ffffff",
+              borderColor: "transparent",
+            }}
+            loading={isLoading}
+          >
             Login
-          </button>
-          <div className="bottomLogin">
-            <p>Don't have an Account?</p>
-            <NavLink to="/signup">Register</NavLink>
-          </div>
-        </form>
-        <img src={bg} alt="background" />
-      </div>
-    </>
+          </Button>
+        </Form.Item>
+      </Form>
+      <img src={bg} alt="background" />
+    </div>
   );
 };
 

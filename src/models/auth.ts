@@ -1,4 +1,5 @@
 export interface LoginResponseModel {
+  id: number;
   accessToken: string;
   refreshToken: string;
 }

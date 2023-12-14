@@ -1,9 +1,11 @@
 import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
 import platformSlice from "../redux/platformSlice";
+import globalSlice from "../redux/globalSlice";
 
 export const store = configureStore({
   reducer: {
     platform: platformSlice,
+    global: globalSlice,
   },
 });
 

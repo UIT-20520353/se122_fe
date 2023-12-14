@@ -24,6 +24,9 @@ const Sidebar: React.FunctionComponent<SidebarProps> = () => {
       <NavLink className={"sidebar__button"} to={"/matching"}>
         Matching
       </NavLink>
+      <NavLink className={"sidebar__button"} to={"/chat"}>
+        Chat
+      </NavLink>
       <NavLink className={"sidebar__button"} to={"/profile"}>
         Profile
       </NavLink>
