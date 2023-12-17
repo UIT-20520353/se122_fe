@@ -12,7 +12,7 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
     <div className="main-layout">
       <Header />
       <div className="flex-row align-start">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <Outlet />
       </div>
     </div>
