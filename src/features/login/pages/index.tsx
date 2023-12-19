@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import bg from "../../../assets/images/loginBG.png";
 import { Link, useNavigate } from "react-router-dom";
 import authApi from "../../../api/authApi";
@@ -10,11 +10,22 @@ import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { SubmitButton } from "../../../components/commons";
 import { useHandleResponseError } from "../../../hooks/useHandleResponseError";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { showErrorModal } from "../../../components/modals/CommonModals";
 
 interface InputFieldProps {
   email: string;
   password: string;
 }
+
+const validationSchema = yup.object().shape({
+  password: yup.string().required("Password is required!"),
+  email: yup
+    .string()
+    .email("Please enter a correctly formatted email address")
+    .required("Email is required!"),
+});
 
 interface ILoginProps {}
 
@@ -26,7 +37,10 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<InputFieldProps>();
+  } = useForm<InputFieldProps>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: { email: "", password: "" },
+  });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
@@ -54,6 +68,15 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
 
     handleResponseError(error);
   };
+
+  useEffect(() => {
+    showErrorModal({
+      onOk: () => {},
+      content: "dasd",
+      title: "Error",
+      className: "modal--error",
+    });
+  }, []);
 
   return (
     <div className="login-page">
@@ -104,7 +127,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
             />
           )}
         </div>
-        <SubmitButton />
+        <SubmitButton isLoading={isLoading} />
         <p className="login-form__footer">
           Don't have an Account ?{" "}
           <Link className="link" to={"/register"}>
