@@ -4,10 +4,13 @@ import "./Homepage.style.css";
 import SockJS from "sockjs-client/dist/sockjs";
 import { Message, over } from "stompjs";
 import { MessageResponse } from "../../../models/message";
+import { useErrTranslation } from "../../../app/hooks";
 
 interface IHomePageProps {}
 
 const HomePage: React.FunctionComponent<IHomePageProps> = () => {
+  const et = useErrTranslation();
+
   const stompClient = useMemo(
     () => over(new SockJS("http://localhost:8080/ws")),
     []
@@ -79,7 +82,9 @@ const HomePage: React.FunctionComponent<IHomePageProps> = () => {
             />
           </svg>
         </div>
-        <button onClick={sendMessage}>dasd</button>
+        <button onClick={sendMessage}>
+          {et("error.validate.email.format")}
+        </button>
       </div>
     </>
   );

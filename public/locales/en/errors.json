@@ -1,0 +1,16 @@
+{
+  "defaultMessage": {
+    "title": "Error",
+    "message": "Something went wrong."
+  },
+  "error": {
+    "validate": {
+      "login": {
+        "invalid-credential": "The email or password provided is incorrect"
+      },
+      "email": {
+        "format": "Please enter a valid email address"
+      }
+    }
+  }
+}

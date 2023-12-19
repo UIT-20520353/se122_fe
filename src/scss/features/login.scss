@@ -19,7 +19,40 @@
   height: 600px;
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 6px;
+
+  &__footer {
+    font-size: 16px;
+    font-weight: 300;
+    color: #7d7d7d;
+    width: 100%;
+    text-align: center;
+    margin: 20px auto;
+
+    .link {
+      font-weight: 600;
+      color: #03045e;
+    }
+  }
+
+  .welcome {
+    font-size: 26px;
+    font-weight: 300;
+  }
+
+  .title {
+    margin-top: 32px;
+    margin-bottom: 40px;
+
+    h2 {
+      font-weight: 500;
+      font-size: 32px;
+    }
+    span {
+      font-size: 16px;
+      font-weight: 400;
+    }
+  }
   // display: flex;
   // flex-direction: column;
   // align-items: start;

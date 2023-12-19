@@ -1,33 +1,43 @@
 import React, { useState } from "react";
 import bg from "../../../assets/images/loginBG.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import authApi from "../../../api/authApi";
 import { setLocalStorage } from "../../../utils/localStorage";
 import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "../../../consts/app";
-import { Button, Form, Input } from "antd";
 import { useAppDispatch } from "../../../app/hooks";
 import { updateUserId } from "../../../redux/globalSlice";
+import { useForm } from "react-hook-form";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { SubmitButton } from "../../../components/commons";
+import { useHandleResponseError } from "../../../hooks/useHandleResponseError";
 
 interface InputFieldProps {
   email: string;
   password: string;
 }
 
-const initialInputField: InputFieldProps = {
-  email: "",
-  password: "",
-};
-
 interface ILoginProps {}
 
 const Login: React.FunctionComponent<ILoginProps> = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [form] = Form.useForm();
+  const handleResponseError = useHandleResponseError();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InputFieldProps>();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
+
+  const handleShowPasswordClick = () => {
+    setIsShowPassword((prev) => !prev);
+  };
 
   const onSubmit = async (value: InputFieldProps) => {
+    console.log(value);
+
     setIsLoading(true);
     const { ok, body, error } = await authApi.login({
       email: value.email,
@@ -42,49 +52,66 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
       return;
     }
 
-    console.error(error);
+    handleResponseError(error);
   };
 
   return (
     <div className="login-page">
-      <Form
-        name="login"
-        className="login-form"
-        layout={"vertical"}
-        size={"large"}
-        form={form}
-        onFinish={onSubmit}
-        autoComplete={"off"}
-        initialValues={initialInputField}
-      >
-        <h2>Welcome!</h2>
-        <Form.Item label={"Email"} name={"email"} style={{ margin: 0 }}>
-          <Input placeholder="Enter your email" />
-        </Form.Item>
-        <Form.Item
-          label="Password"
-          name={"password"}
-          style={{
-            margin: 0,
-          }}
-        >
-          <Input.Password placeholder="Enter your password" />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            htmlType={"submit"}
-            className="submit-button"
-            style={{
-              fontWeight: 600,
-              color: "#ffffff",
-              borderColor: "transparent",
-            }}
-            loading={isLoading}
-          >
-            Login
-          </Button>
-        </Form.Item>
-      </Form>
+      <form onSubmit={handleSubmit(onSubmit)} className="login-form">
+        <h2 className="welcome">Welcome!</h2>
+        <div className="title">
+          <h2>Sign in to</h2>
+          <span>Ielts Tinder ?</span>
+        </div>
+        <div className="primary-input">
+          <label htmlFor="email">Email</label>
+          <input
+            type="text"
+            id="email"
+            autoComplete="off"
+            placeholder="Enter your email"
+            {...register("email", {
+              required: "Email is required!",
+            })}
+          />
+          {errors.email && (
+            <span className="error">{errors.email.message}</span>
+          )}
+        </div>
+        <div className="primary-input">
+          <label htmlFor="password">Password</label>
+          <input
+            type={isShowPassword ? "text" : "password"}
+            id="password"
+            autoComplete="off"
+            placeholder="Enter your password"
+            {...register("password", {
+              required: "Password is required!",
+            })}
+          />
+          {errors.password && (
+            <span className="error">{errors.password.message}</span>
+          )}
+          {isShowPassword ? (
+            <FaEye
+              onClick={handleShowPasswordClick}
+              className="primary-input__icon"
+            />
+          ) : (
+            <FaEyeSlash
+              onClick={handleShowPasswordClick}
+              className="primary-input__icon"
+            />
+          )}
+        </div>
+        <SubmitButton />
+        <p className="login-form__footer">
+          Don't have an Account ?{" "}
+          <Link className="link" to={"/register"}>
+            Register
+          </Link>
+        </p>
+      </form>
       <img src={bg} alt="background" />
     </div>
   );
