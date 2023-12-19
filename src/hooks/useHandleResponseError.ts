@@ -5,7 +5,7 @@ import { showErrorModal } from "../components/modals/CommonModals";
 import { removeLocalStorage } from "../utils/localStorage";
 import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "../consts/app";
 
-const useHandleResponseError = () => {
+const useHandleResponseError = (title: string | null = null) => {
   const dispatch = useAppDispatch();
   const et = useErrTranslation();
 
@@ -32,9 +32,12 @@ const useHandleResponseError = () => {
         showErrorModal({
           content: et(error.message),
           onOk,
-          title: et(error.title || "", {
-            defaultValue: et("defaultMessage.title"),
-          }),
+          title:
+            title ??
+            et(error.title || "", {
+              defaultValue: et("defaultMessage.title"),
+            }),
+          className: "modal--error",
         });
       }
 
@@ -42,9 +45,12 @@ const useHandleResponseError = () => {
         showErrorModal({
           content: et(error.message),
           onOk,
-          title: et(error.title || "", {
-            defaultValue: et("defaultMessage.title"),
-          }),
+          title:
+            title ??
+            et(error.title || "", {
+              defaultValue: et("defaultMessage.title"),
+            }),
+          className: "modal--error",
         });
       }
 

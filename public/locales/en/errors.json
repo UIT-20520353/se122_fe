@@ -10,6 +10,10 @@
       },
       "email": {
         "format": "Please enter a valid email address"
+      },
+      "user": {
+        "already-exist": "This email address is already associated with an account.",
+        "blocked": "Your account has been blocked"
       }
     }
   }

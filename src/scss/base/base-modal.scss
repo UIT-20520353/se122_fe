@@ -1,7 +1,77 @@
-.modal--error {
+.base-modal {
   .ant-modal-content {
     display: flex;
     flex-direction: column;
     align-items: center;
+    .ant-modal-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+
+      .ant-modal-confirm-body-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .ant-modal-confirm-body {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .anticon {
+            margin: 0;
+
+            svg {
+              width: 40px;
+              height: 40px;
+            }
+          }
+
+          .ant-modal-confirm-paragraph {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .ant-modal-confirm-title {
+              font-size: 20px;
+              font-weight: 700;
+            }
+
+            .ant-modal-confirm-content {
+              font-size: 16px;
+              font-weight: 400;
+              text-align: center;
+            }
+          }
+        }
+
+        .ant-modal-confirm-btns {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .ant-btn {
+            width: 80%;
+            background-color: #030575;
+            min-height: 45px;
+            border-radius: 6px;
+            border-color: transparent;
+            transition: all 0.3s;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+
+            &:hover {
+              opacity: 0.8;
+            }
+          }
+        }
+      }
+    }
   }
 }

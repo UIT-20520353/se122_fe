@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
-import bg from "../../../assets/images/loginBG.png";
-import { Link, useNavigate } from "react-router-dom";
-import authApi from "../../../api/authApi";
-import { setLocalStorage } from "../../../utils/localStorage";
-import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "../../../consts/app";
-import { useAppDispatch } from "../../../app/hooks";
-import { updateUserId } from "../../../redux/globalSlice";
+import { yupResolver } from "@hookform/resolvers/yup";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { SubmitButton } from "../../../components/commons";
-import { useHandleResponseError } from "../../../hooks/useHandleResponseError";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { showErrorModal } from "../../../components/modals/CommonModals";
+import authApi from "../../../api/authApi";
+import { useAppDispatch } from "../../../app/hooks";
+import bg from "../../../assets/images/loginBG.png";
+import { SubmitButton } from "../../../components/commons";
+import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "../../../consts/app";
+import { useHandleResponseError } from "../../../hooks/useHandleResponseError";
+import { updateUserId } from "../../../redux/globalSlice";
+import { setLocalStorage } from "../../../utils/localStorage";
 
 interface InputFieldProps {
   email: string;
@@ -32,7 +31,7 @@ interface ILoginProps {}
 const Login: React.FunctionComponent<ILoginProps> = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const handleResponseError = useHandleResponseError();
+  const handleResponseError = useHandleResponseError("Login Error");
   const {
     register,
     handleSubmit,
@@ -68,15 +67,6 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
 
     handleResponseError(error);
   };
-
-  useEffect(() => {
-    showErrorModal({
-      onOk: () => {},
-      content: "dasd",
-      title: "Error",
-      className: "modal--error",
-    });
-  }, []);
 
   return (
     <div className="login-page">

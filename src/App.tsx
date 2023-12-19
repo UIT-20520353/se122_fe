@@ -18,7 +18,7 @@ const App: React.FunctionComponent<IAppProps> = () => {
     <React.Fragment>
       <Routes>
         <Route path="login" element={<Login />} />
-        <Route path="signup" element={<Register />} />
+        <Route path="register" element={<Register />} />
         <Route path="calling" element={<Calling />} />
         <Route path={"/"} element={<MainLayout />}>
           <Route index element={<HomePage />} />
