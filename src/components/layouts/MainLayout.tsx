@@ -11,10 +11,10 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
   return (
     <div className="main-layout">
       <Header />
-      <div className="flex-row align-start">
-        {/* <Sidebar /> */}
-        <Outlet />
-      </div>
+      {/* <div className="flex-row align-start"> */}
+      {/* <Sidebar /> */}
+      {/* <Outlet /> */}
+      {/* </div> */}
     </div>
   );
 };
