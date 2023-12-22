@@ -49,8 +49,6 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
   };
 
   const onSubmit = async (value: InputFieldProps) => {
-    console.log(value);
-
     setIsLoading(true);
     const { ok, body, error } = await authApi.login({
       email: value.email,

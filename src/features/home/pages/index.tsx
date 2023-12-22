@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from "react";
 import PersonalCart from "../../../components/PersonalCart/PersonalCart";
-import "./Homepage.style.css";
 import SockJS from "sockjs-client/dist/sockjs";
 import { Message, over } from "stompjs";
 import { MessageResponse } from "../../../models/message";
@@ -9,42 +8,42 @@ import { useErrTranslation } from "../../../app/hooks";
 interface IHomePageProps {}
 
 const HomePage: React.FunctionComponent<IHomePageProps> = () => {
-  const et = useErrTranslation();
+  // const et = useErrTranslation();
 
-  const stompClient = useMemo(
-    () => over(new SockJS("http://localhost:8080/ws")),
-    []
-  );
-  stompClient.debug = () => {};
-  const connect = () => {
-    stompClient.connect({}, onConnected, onError);
-  };
+  // const stompClient = useMemo(
+  //   () => over(new SockJS("http://localhost:8080/ws")),
+  //   []
+  // );
+  // stompClient.debug = () => {};
+  // const connect = () => {
+  //   stompClient.connect({}, onConnected, onError);
+  // };
 
-  const onMessageReceived = (payload: Message) => {
-    const payloadData: MessageResponse = JSON.parse(payload.body);
-    console.log(payloadData);
-  };
+  // const onMessageReceived = (payload: Message) => {
+  //   const payloadData: MessageResponse = JSON.parse(payload.body);
+  //   console.log(payloadData);
+  // };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onError = (error: any) => {
-    console.log(error);
-  };
+  // // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // const onError = (error: any) => {
+  //   console.log(error);
+  // };
 
-  const onConnected = () => {
-    stompClient.subscribe("/chatroom/public", onMessageReceived);
-  };
+  // const onConnected = () => {
+  //   stompClient.subscribe("/chatroom/public", onMessageReceived);
+  // };
 
-  const sendMessage = () => {
-    try {
-      stompClient.send("/app/message", {}, JSON.stringify("Hello"));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const sendMessage = () => {
+  //   try {
+  //     stompClient.send("/app/message", {}, JSON.stringify("Hello"));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    connect();
-  }, []);
+  // useEffect(() => {
+  //   connect();
+  // }, []);
 
   return (
     <>
@@ -82,9 +81,9 @@ const HomePage: React.FunctionComponent<IHomePageProps> = () => {
             />
           </svg>
         </div>
-        <button onClick={sendMessage}>
+        {/* <button onClick={sendMessage}>
           {et("error.validate.email.format")}
-        </button>
+        </button> */}
       </div>
     </>
   );

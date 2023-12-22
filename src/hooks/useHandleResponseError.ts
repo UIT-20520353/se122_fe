@@ -2,16 +2,17 @@ import { useCallback } from "react";
 import { HttpError } from "../models/http";
 import { useAppDispatch, useErrTranslation } from "../app/hooks";
 import { showErrorModal } from "../components/modals/CommonModals";
-import { removeLocalStorage } from "../utils/localStorage";
-import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "../consts/app";
+import { logout } from "../redux/globalSlice";
+import { useNavigate } from "react-router-dom";
 
 const useHandleResponseError = (title: string | null = null) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const et = useErrTranslation();
 
   const handleOK = () => {
-    //   dispatch(setClearStateToLogout());
-    removeLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_KEY);
+    dispatch(logout());
+    navigate("/login");
   };
 
   return useCallback(

@@ -18,3 +18,17 @@ export interface RegisterRequestModel {
   gender: number;
   age: number;
 }
+
+export interface UserProfileModel {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  address: string;
+  gender: string;
+  age: number;
+  overall: number;
+  target: number;
+  description: string;
+  avatar: string;
+}

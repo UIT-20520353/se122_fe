@@ -1,19 +1,23 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import HomePage from "./features/home/pages";
+import { useAppSelector } from "./app/hooks";
 import { NotFoundPage } from "./components/commons";
+import { Loading } from "./components/commons/Loading";
 import MainLayout from "./components/layouts/MainLayout";
-import ProfilePage from "./features/profile/pages";
-import Matching from "./features/matching/pages";
 import CalendarPage from "./features/calendar/pages";
-import Login from "./features/login/pages";
-import Register from "./features/register/pages";
 import Calling from "./features/calling/pages";
-import Chat from "./features/chat/page";
+import HomePage from "./features/home/pages";
+import Login from "./features/login/pages";
+import Matching from "./features/matching/pages";
+import ProfilePage from "./features/profile/pages";
+import Register from "./features/register/pages";
+import { selectLoading } from "./redux/globalSlice";
 
 interface IAppProps {}
 
 const App: React.FunctionComponent<IAppProps> = () => {
+  const loading = useAppSelector(selectLoading);
+
   return (
     <React.Fragment>
       <Routes>
@@ -25,10 +29,10 @@ const App: React.FunctionComponent<IAppProps> = () => {
           <Route path="profile" element={<ProfilePage />} />
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="matching" element={<Matching />} />
-          <Route path="chat" element={<Chat />} />
         </Route>
         <Route path={"*"} element={<NotFoundPage />} />
       </Routes>
+      {loading > 0 && <Loading />}
     </React.Fragment>
   );
 };
