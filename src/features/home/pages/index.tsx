@@ -1,54 +1,74 @@
 import React, { useEffect, useMemo } from "react";
-import PersonalCart from "../../../components/PersonalCart/PersonalCart";
-import SockJS from "sockjs-client/dist/sockjs";
+import SockJS from "sockjs-client/dist/sockjs.js";
 import { Message, over } from "stompjs";
-import { MessageResponse } from "../../../models/message";
-import { useErrTranslation } from "../../../app/hooks";
+import { useAppSelector } from "../../../app/hooks";
+import PersonalCart from "../../../components/PersonalCart/PersonalCart";
+import { MessageRequest, MessageResponse } from "../../../models/message";
+import { selectProfile } from "../../../redux/globalSlice";
 
 interface IHomePageProps {}
 
 const HomePage: React.FunctionComponent<IHomePageProps> = () => {
-  // const et = useErrTranslation();
+  const profile = useAppSelector(selectProfile);
 
-  // const stompClient = useMemo(
-  //   () => over(new SockJS("http://localhost:8080/ws")),
-  //   []
-  // );
-  // stompClient.debug = () => {};
-  // const connect = () => {
-  //   stompClient.connect({}, onConnected, onError);
-  // };
+  const stompClient = useMemo(
+    () => over(new SockJS("http://localhost:8080/ws")),
+    []
+  );
+  stompClient.debug = () => {};
+  const connect = () => {
+    stompClient.connect({}, onConnected, onError);
+  };
 
-  // const onMessageReceived = (payload: Message) => {
-  //   const payloadData: MessageResponse = JSON.parse(payload.body);
-  //   console.log(payloadData);
-  // };
+  const onMessageReceived = (payload: Message) => {
+    const payloadData: MessageResponse = JSON.parse(payload.body);
+    console.log(payloadData);
+  };
 
-  // // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const onError = (error: any) => {
-  //   console.log(error);
-  // };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onError = (error: any) => {
+    console.log(error);
+  };
 
-  // const onConnected = () => {
-  //   stompClient.subscribe("/chatroom/public", onMessageReceived);
-  // };
+  const onConnected = () => {
+    if (profile?.id)
+      stompClient.subscribe(`/user/${profile.id}/private`, onMessageReceived);
+  };
 
-  // const sendMessage = () => {
-  //   try {
-  //     stompClient.send("/app/message", {}, JSON.stringify("Hello"));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const sendMessage = () => {
+    const message: MessageRequest = {
+      message: "Hello",
+      type: "MESSAGE",
+      token: "dasdasdad",
+    };
 
-  // useEffect(() => {
-  //   connect();
-  // }, []);
+    try {
+      stompClient.send("/app/message", {}, JSON.stringify(message));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    connect();
+    return () => {
+      if (stompClient.connected) {
+        stompClient.disconnect(() => {});
+      }
+    };
+  }, [profile?.id]);
 
   return (
     <>
       <div className="cartItemWrapper">
-        <div className="cartItemMainPage">
+        <div
+          className="cartItemMainPage"
+          style={{
+            display: "flex",
+            alignItems: "start",
+            justifyContent: "space-around",
+          }}
+        >
           <PersonalCart pageId="home" />
           <PersonalCart pageId="home" />
           <PersonalCart pageId="home" />
@@ -81,9 +101,7 @@ const HomePage: React.FunctionComponent<IHomePageProps> = () => {
             />
           </svg>
         </div>
-        {/* <button onClick={sendMessage}>
-          {et("error.validate.email.format")}
-        </button> */}
+        <button onClick={sendMessage}>Send</button>
       </div>
     </>
   );
