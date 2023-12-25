@@ -1,109 +1,179 @@
-import React, { useEffect, useMemo } from "react";
-import SockJS from "sockjs-client/dist/sockjs.js";
-import { Message, over } from "stompjs";
-import { useAppSelector } from "../../../app/hooks";
-import PersonalCart from "../../../components/PersonalCart/PersonalCart";
-import { MessageRequest, MessageResponse } from "../../../models/message";
-import { selectProfile } from "../../../redux/globalSlice";
+import React, { useEffect, useMemo, useState } from "react";
+// import SockJS from "sockjs-client/dist/sockjs.js";
+// import { Message, over } from "stompjs";
+// import { useAppSelector } from "../../../app/hooks";
+import userApi from "../../../api/userApi";
+import { useAppDispatch } from "../../../app/hooks";
+import { useHandleResponseError } from "../../../hooks/useHandleResponseError";
+import { UserModel } from "../../../models/user";
+import { setLoading } from "../../../redux/globalSlice";
+import UserCart from "../components/UserCart";
+import { GrLinkPrevious, GrLinkNext } from "react-icons/gr";
+// import { MessageRequest, MessageResponse } from "../../../models/message";
+// import { selectProfile } from "../../../redux/globalSlice";
 
 interface IHomePageProps {}
 
+interface DataProps {
+  users: UserModel[];
+  totalUsers: number;
+}
+
 const HomePage: React.FunctionComponent<IHomePageProps> = () => {
-  const profile = useAppSelector(selectProfile);
+  const dispatch = useAppDispatch();
+  const handleResponseError = useHandleResponseError();
 
-  const stompClient = useMemo(
-    () => over(new SockJS("http://localhost:8080/ws")),
-    []
-  );
-  stompClient.debug = () => {};
-  const connect = () => {
-    stompClient.connect({}, onConnected, onError);
-  };
+  const [data, setData] = useState<DataProps>({ users: [], totalUsers: 0 });
+  const [page, setPage] = useState<number>(0);
+  const [statusButtons, setStatusButtons] = useState<boolean[]>([
+    false,
+    false,
+    false,
+  ]);
+  const [tab, setTab] = useState<number>(0);
 
-  const onMessageReceived = (payload: Message) => {
-    const payloadData: MessageResponse = JSON.parse(payload.body);
-    console.log(payloadData);
-  };
+  // const profile = useAppSelector(selectProfile);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onError = (error: any) => {
-    console.log(error);
-  };
+  // const stompClient = useMemo(
+  //   () => over(new SockJS("http://localhost:8080/ws")),
+  //   []
+  // );
+  // stompClient.debug = () => {};
+  // const connect = () => {
+  //   stompClient.connect({}, onConnected, onError);
+  // };
 
-  const onConnected = () => {
-    if (profile?.id)
-      stompClient.subscribe(`/user/${profile.id}/private`, onMessageReceived);
-  };
+  // const onMessageReceived = (payload: Message) => {
+  //   const payloadData: MessageResponse = JSON.parse(payload.body);
+  //   console.log(payloadData);
+  // };
 
-  const sendMessage = () => {
-    const message: MessageRequest = {
-      message: "Hello",
-      type: "MESSAGE",
-      token: "dasdasdad",
-    };
+  // // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // const onError = (error: any) => {
+  //   console.log(error);
+  // };
 
-    try {
-      stompClient.send("/app/message", {}, JSON.stringify(message));
-    } catch (error) {
-      console.log(error);
+  // const onConnected = () => {
+  //   if (profile?.id)
+  //     stompClient.subscribe(`/user/${profile.id}/private`, onMessageReceived);
+  // };
+
+  // const sendMessage = () => {
+  //   const message: MessageRequest = {
+  //     message: "Hello",
+  //     type: "MESSAGE",
+  //     token: "dasdasdad",
+  //   };
+
+  //   try {
+  //     stompClient.send("/app/message", {}, JSON.stringify(message));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   connect();
+  //   return () => {
+  //     if (stompClient.connected) {
+  //       stompClient.disconnect(() => {});
+  //     }
+  //   };
+  // }, [profile?.id]);
+
+  const handleChangePage = (type: "INCREASE" | "DECREASE") => {
+    switch (type) {
+      case "INCREASE":
+        setPage((prev) => (prev + 1 >= totalPages ? 0 : prev + 1));
+        break;
+      case "DECREASE":
+        setPage((prev) => (prev - 1 < 0 ? totalPages - 1 : prev - 1));
+        break;
+      default:
+        break;
     }
   };
 
-  useEffect(() => {
-    connect();
-    return () => {
-      if (stompClient.connected) {
-        stompClient.disconnect(() => {});
+  const updateStatusButtons = (index: number) => {
+    setStatusButtons((prev) => {
+      const temp = [...prev];
+      temp[index] = !prev[index];
+      return temp;
+    });
+  };
+
+  const fetchData = async (page: number) => {
+    setStatusButtons([false, false, false]);
+    dispatch(setLoading("ADD"));
+    const { ok, body, error, pagination } = await userApi.getListUserForRequest(
+      {
+        size: 3,
+        page,
       }
-    };
-  }, [profile?.id]);
+    );
+    dispatch(setLoading("REMOVE"));
+
+    if (ok && body && pagination) {
+      setData({ users: body, totalUsers: pagination.total });
+    } else {
+      handleResponseError(error);
+    }
+  };
+
+  const totalPages = useMemo(() => {
+    return Math.ceil(data.totalUsers / 3);
+  }, [data.totalUsers]);
+
+  useEffect(() => {
+    fetchData(page);
+  }, [page]);
 
   return (
-    <>
-      <div className="cartItemWrapper">
-        <div
-          className="cartItemMainPage"
-          style={{
-            display: "flex",
-            alignItems: "start",
-            justifyContent: "space-around",
-          }}
+    <div className="home-page">
+      <div className="tabs">
+        <button
+          className={`tab ${!tab ? "active" : ""}`}
+          onClick={() => setTab(0)}
         >
-          <PersonalCart pageId="home" />
-          <PersonalCart pageId="home" />
-          <PersonalCart pageId="home" />
-        </div>
-        <div className="buttonGroup">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="36"
-            height="36"
-            fill="currentColor"
-            className="bi bi-arrow-left-circle"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"
-            />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="36"
-            height="36"
-            fill="currentColor"
-            className="bi bi-arrow-right-circle"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"
-            />
-          </svg>
-        </div>
-        <button onClick={sendMessage}>Send</button>
+          Recommend
+        </button>
+        <button
+          className={`tab ${tab ? "active" : ""}`}
+          onClick={() => setTab(1)}
+        >
+          Sent
+        </button>
       </div>
-    </>
+      <div className="content">
+        <div className="user-list">
+          {data.users.map((user, index) => (
+            <UserCart
+              user={user}
+              key={`user-${user.id}`}
+              index={index}
+              statusButtons={statusButtons}
+              updateStatusButtons={updateStatusButtons}
+            />
+          ))}
+        </div>
+        {totalPages > 1 && (
+          <div className="control-buttons">
+            <button
+              className="btn"
+              onClick={() => handleChangePage("DECREASE")}
+            >
+              <GrLinkPrevious className="btn__icon" />
+            </button>
+            <button
+              className="btn"
+              onClick={() => handleChangePage("INCREASE")}
+            >
+              <GrLinkNext className="btn__icon" />
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
