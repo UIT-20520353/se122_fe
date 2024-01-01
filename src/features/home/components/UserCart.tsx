@@ -39,7 +39,7 @@ const UserCart: React.FunctionComponent<UserCartProps> = ({
 
   return (
     <div className="user-cart">
-      <div>
+      <div className="w-full">
         <div className="user-cart__header">
           <img className="avatar" src={user.avatar} />
           <div className="user-detail">
