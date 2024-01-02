@@ -1,6 +1,8 @@
 import React from "react";
+import { FiHome } from "react-icons/fi";
+import { MdOutlineConnectWithoutContact } from "react-icons/md";
+import { TfiWrite } from "react-icons/tfi";
 import { NavLink } from "react-router-dom";
-import { FiHome, FiCalendar } from "react-icons/fi";
 
 interface SidebarProps {}
 
@@ -11,12 +13,13 @@ const Sidebar: React.FunctionComponent<SidebarProps> = () => {
         <FiHome className={"icon"} />
         Home
       </NavLink>
-      <NavLink className={"sidebar__button"} to={"/calendar"}>
-        <FiCalendar className={"icon"} />
-        Calendar
+      <NavLink className={"sidebar__button"} to={"/communication"}>
+        <MdOutlineConnectWithoutContact className={"icon"} />
+        Communication
       </NavLink>
-      <NavLink className={"sidebar__button"} to={"/matching"}>
-        Matching
+      <NavLink className={"sidebar__button"} to={"/practice"}>
+        <TfiWrite className={"icon"} />
+        Practice
       </NavLink>
     </div>
   );
