@@ -9,6 +9,7 @@ import { UserModel } from "../../../models/user";
 import { setLoading } from "../../../redux/globalSlice";
 import UserCart from "../components/UserCart";
 import { GrLinkPrevious, GrLinkNext } from "react-icons/gr";
+import { Empty } from "../../../components/commons";
 // import { MessageRequest, MessageResponse } from "../../../models/message";
 // import { selectProfile } from "../../../redux/globalSlice";
 
@@ -130,26 +131,40 @@ const Recommend: React.FunctionComponent<IRecommendProps> = () => {
 
   return (
     <Fragment>
-      <div className="user-list">
-        {data.users.map((user, index) => (
-          <UserCart
-            user={user}
-            key={`user-${user.id}`}
-            index={index}
-            statusButtons={statusButtons}
-            updateStatusButtons={updateStatusButtons}
-          />
-        ))}
-      </div>
-      {totalPages > 1 && (
-        <div className="control-buttons">
-          <button className="btn" onClick={() => handleChangePage("DECREASE")}>
-            <GrLinkPrevious className="btn__icon" />
-          </button>
-          <button className="btn" onClick={() => handleChangePage("INCREASE")}>
-            <GrLinkNext className="btn__icon" />
-          </button>
-        </div>
+      {data.totalUsers ? (
+        <Fragment>
+          <div className="user-list">
+            {data.users.map((user, index) => (
+              <UserCart
+                user={user}
+                key={`user-${user.id}`}
+                index={index}
+                statusButtons={statusButtons}
+                updateStatusButtons={updateStatusButtons}
+                type={"SEND_CANCEL"}
+                afterUnfriend={() => {}}
+              />
+            ))}
+          </div>
+          {totalPages > 1 && (
+            <div className="control-buttons">
+              <button
+                className="btn"
+                onClick={() => handleChangePage("DECREASE")}
+              >
+                <GrLinkPrevious className="btn__icon" />
+              </button>
+              <button
+                className="btn"
+                onClick={() => handleChangePage("INCREASE")}
+              >
+                <GrLinkNext className="btn__icon" />
+              </button>
+            </div>
+          )}
+        </Fragment>
+      ) : (
+        <Empty />
       )}
     </Fragment>
   );

@@ -2,7 +2,10 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../app/store";
 import { UserProfileModel } from "../models/auth";
 import { removeLocalStorage } from "../utils/localStorage";
-import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "../consts/app";
+import {
+  ACCESS_TOKEN_LOCAL_STORAGE_KEY,
+  USER_ID_LOCAL_STORAGE_KEY,
+} from "../consts/app";
 
 interface InitialStateProps {
   userId: number;
@@ -44,6 +47,7 @@ const globalSlice = createSlice({
     logout: (state) => {
       state.profile = null;
       removeLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_KEY);
+      removeLocalStorage(USER_ID_LOCAL_STORAGE_KEY);
     },
   },
 });

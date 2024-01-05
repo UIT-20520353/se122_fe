@@ -1,5 +1,6 @@
 import * as Stomp from "stompjs";
 import SockJS from "sockjs-client/dist/sockjs.js";
+import { MessageRequest } from "../../models/message";
 
 class StompClient {
   private stompClient: Stomp.Client | null = null;
@@ -28,17 +29,19 @@ class StompClient {
     const socket = new SockJS(endpoint);
     this.stompClient = Stomp.over(socket);
 
-    this.stompClient.connect(
-      {},
-      (frame) => {
-        console.log("Connected: " + frame);
-        onConnect();
-      },
-      (error) => {
-        console.error("STOMP error: " + error);
-        onError(error.toString());
-      }
-    );
+    if (this.stompClient && !this.stompClient.connected) {
+      this.stompClient.connect(
+        {},
+        (frame) => {
+          console.log("Connected: " + frame);
+          onConnect();
+        },
+        (error) => {
+          console.error("STOMP error: " + error);
+          onError(error.toString());
+        }
+      );
+    }
   }
 
   disconnect() {
@@ -46,6 +49,16 @@ class StompClient {
       this.stompClient.disconnect(() => {
         console.log("Disconnected");
       });
+    }
+  }
+
+  send(message: MessageRequest) {
+    if (this.stompClient && this.stompClient.connected) {
+      this.stompClient.send(
+        "/app/private-message",
+        {},
+        JSON.stringify(message)
+      );
     }
   }
 }

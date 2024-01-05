@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Header, Sidebar } from "../commons";
 import { Outlet } from "react-router";
 import useProtectedRoute from "../../hooks/useProtectedRoute";
@@ -37,6 +37,8 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
 
   useEffectOnce(() => {
     fetchData();
+    console.log("a");
+
     stompClient.connect(
       "http://localhost:8080/ws",
       () => {
@@ -49,7 +51,23 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
         console.error(error);
       }
     );
+
+    return () => {
+      stompClient.disconnect();
+    };
   });
+
+  useEffect(() => {
+    if (profile) {
+      stompClient.subcribe(`/user/${profile.id}/private`, (message) => {
+        console.log(message);
+      });
+    }
+    return () => {
+      stompClient.ubsubcribe(`/user/${profile?.id || 0}/private`);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile?.id]);
 
   return (
     <div className="main-layout">

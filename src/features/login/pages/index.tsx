@@ -5,12 +5,13 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import authApi from "../../../api/authApi";
-import { useAppDispatch } from "../../../app/hooks";
 import bg from "../../../assets/images/loginBG.png";
 import { SubmitButton } from "../../../components/commons";
-import { ACCESS_TOKEN_LOCAL_STORAGE_KEY } from "../../../consts/app";
+import {
+  ACCESS_TOKEN_LOCAL_STORAGE_KEY,
+  USER_ID_LOCAL_STORAGE_KEY,
+} from "../../../consts/app";
 import { useHandleResponseError } from "../../../hooks/useHandleResponseError";
-import { updateUserId } from "../../../redux/globalSlice";
 import { setLocalStorage } from "../../../utils/localStorage";
 
 interface InputFieldProps {
@@ -30,7 +31,6 @@ interface ILoginProps {}
 
 const Login: React.FunctionComponent<ILoginProps> = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const handleResponseError = useHandleResponseError("Login Error");
   const {
     register,
@@ -58,7 +58,7 @@ const Login: React.FunctionComponent<ILoginProps> = () => {
 
     if (ok && body) {
       setLocalStorage(ACCESS_TOKEN_LOCAL_STORAGE_KEY, body.accessToken);
-      dispatch(updateUserId(body.id));
+      setLocalStorage(USER_ID_LOCAL_STORAGE_KEY, String(body.id));
       navigate("/");
       return;
     }

@@ -226,4 +226,38 @@
       }
     }
   }
+
+  .handle-request {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+
+    button {
+      flex: 1;
+      height: 44px;
+      border: 0;
+      outline: none;
+      transition: all 0.3s;
+      border-radius: 999px;
+      font-size: 16px;
+      color: #fff;
+      cursor: pointer;
+
+      &:first-child {
+        background-color: #1eaae7;
+        &:hover {
+          background-color: #148abe;
+        }
+      }
+
+      &:last-child {
+        background-color: #e5383b;
+        &:hover {
+          background-color: #ba181b;
+        }
+      }
+    }
+  }
 }

@@ -1,24 +1,54 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
-import { MdOutlineMoreHoriz, MdArrowBack } from "react-icons/md";
-import { IoMdSend } from "react-icons/io";
+import ChatBox from "../components/ChatBox";
+import { useAppDispatch } from "../../../app/hooks";
+import { useHandleResponseError } from "../../../hooks/useHandleResponseError";
+import { setLoading } from "../../../redux/globalSlice";
+import chatroomApi from "../../../api/chatroomApi";
+import { ChatRoomModel } from "../../../models/chatroom";
+import { UserModel } from "../../../models/user";
 
 interface ChatProps {
   isOpen: boolean;
   closeModal: () => void;
 }
 
-const Chat: React.FunctionComponent<ChatProps> = ({ isOpen, closeModal }) => {
-  const divContentRef = useRef<HTMLDivElement>(null);
+interface SelectedRowProps {
+  user: UserModel;
+  chatroomId: number;
+}
 
-  const [isShowChatbox, setIsShowChatbox] = useState<boolean>(false);
+const Chat: React.FunctionComponent<ChatProps> = ({ isOpen, closeModal }) => {
+  const dispatch = useAppDispatch();
+  const handleResponseError = useHandleResponseError();
+
+  const divContentRef = useRef<HTMLDivElement>(null);
+  const [chatrooms, setChatrooms] = useState<ChatRoomModel[]>([]);
+  const [selectedRow, setSelectedRow] = useState<SelectedRowProps | null>(null);
 
   const onCLickOutside = () => {
-    setIsShowChatbox(false);
+    setSelectedRow(null);
     closeModal();
   };
 
   useOnClickOutside(divContentRef, onCLickOutside);
+
+  const fetchData = async () => {
+    dispatch(setLoading("ADD"));
+    const { ok, body, error } = await chatroomApi.getChatrooms();
+    dispatch(setLoading("REMOVE"));
+
+    if (ok && body) {
+      setChatrooms(body);
+    }
+
+    handleResponseError(error);
+  };
+
+  useEffect(() => {
+    if (isOpen) fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   return (
     <div className={`chat-page ${isOpen ? "show" : ""}`}>
@@ -26,43 +56,31 @@ const Chat: React.FunctionComponent<ChatProps> = ({ isOpen, closeModal }) => {
         <div className="content__header">
           <h3>Chat</h3>
         </div>
-        {isShowChatbox ? (
-          <div className="chatbox">
-            <div className="chatbox__header">
-              <MdArrowBack
-                className="icon"
-                onClick={() => setIsShowChatbox(false)}
-              />
-              <span className="name">Nam Do</span>
-              <MdOutlineMoreHoriz className="icon" />
-            </div>
-            <div className="chatbox__content"></div>
-            <div className="chatbox__footer">
-              <input
-                type="text"
-                placeholder="Aa"
-                id="input-message"
-                className="input-message"
-              />
-              <button className="btn-send" type="button">
-                <IoMdSend className="icon" />
-              </button>
-            </div>
-          </div>
+        {selectedRow ? (
+          <ChatBox
+            chatroomId={selectedRow.chatroomId}
+            user={selectedRow.user}
+            onCloseChatBox={() => setSelectedRow(null)}
+          />
         ) : (
           <div className="content__list-user">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
+            {chatrooms.map((c) => (
               <div
-                key={`row-user-${item}`}
+                key={`row-user-${c.id}`}
                 className="user"
-                onClick={() => setIsShowChatbox(true)}
+                onClick={() =>
+                  setSelectedRow({
+                    user: c.user,
+                    chatroomId: c.id,
+                  })
+                }
               >
                 <img
                   className="user__avatar"
-                  src="https://variety.com/wp-content/uploads/2021/04/Avatar.jpg"
+                  src={c.user.avatar}
                   alt="user avatar"
                 />
-                <span className="user__name">Nam Do</span>
+                <span className="user__name">{`${c.user.firstName} ${c.user.lastName}`}</span>
               </div>
             ))}
           </div>

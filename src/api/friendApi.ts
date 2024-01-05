@@ -20,6 +20,18 @@ const friendApi = {
       })
     );
   },
+  unfriend: (id: number): Promise<HttpResponse<unknown>> => {
+    const url = `/api/friends/${id}`;
+    return handleRequest(
+      axiosClient.delete(url, {
+        headers: {
+          Authorization: `Bearer ${getLocalStorage(
+            ACCESS_TOKEN_LOCAL_STORAGE_KEY
+          )}`,
+        },
+      })
+    );
+  },
 };
 
 export default friendApi;

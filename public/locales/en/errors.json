@@ -15,6 +15,10 @@
         "already-exist": "This email address is already associated with an account.",
         "blocked": "Your account has been blocked"
       }
+    },
+    "request": {
+      "not-exist": "The request has been canceled",
+      "accepted": "The request has been accepted"
     }
   }
 }

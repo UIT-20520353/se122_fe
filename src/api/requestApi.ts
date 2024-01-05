@@ -50,6 +50,60 @@ const requestApi = {
       })
     );
   },
+  getSentRequests: (
+    params: BaseRequestQueryParam
+  ): Promise<HttpResponse<RequestModel[]>> => {
+    const url = "/api/requests/sent";
+    return handleRequest(
+      axiosClient.get(url, {
+        params,
+        headers: {
+          Authorization: `Bearer ${getLocalStorage(
+            ACCESS_TOKEN_LOCAL_STORAGE_KEY
+          )}`,
+        },
+      })
+    );
+  },
+  getReceivedRequests: (
+    params: BaseRequestQueryParam
+  ): Promise<HttpResponse<RequestModel[]>> => {
+    const url = "/api/requests/received";
+    return handleRequest(
+      axiosClient.get(url, {
+        params,
+        headers: {
+          Authorization: `Bearer ${getLocalStorage(
+            ACCESS_TOKEN_LOCAL_STORAGE_KEY
+          )}`,
+        },
+      })
+    );
+  },
+  acceptRequest: (userId: number): Promise<HttpResponse<unknown>> => {
+    const url = `/api/requests/accept/${userId}`;
+    return handleRequest(
+      axiosClient.post(url, null, {
+        headers: {
+          Authorization: `Bearer ${getLocalStorage(
+            ACCESS_TOKEN_LOCAL_STORAGE_KEY
+          )}`,
+        },
+      })
+    );
+  },
+  rejectRequest: (userId: number): Promise<HttpResponse<unknown>> => {
+    const url = `/api/requests/reject/${userId}`;
+    return handleRequest(
+      axiosClient.post(url, null, {
+        headers: {
+          Authorization: `Bearer ${getLocalStorage(
+            ACCESS_TOKEN_LOCAL_STORAGE_KEY
+          )}`,
+        },
+      })
+    );
+  },
 };
 
 export default requestApi;
