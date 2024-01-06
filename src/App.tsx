@@ -13,6 +13,7 @@ import Register from "./features/register/pages";
 import { selectLoading } from "./redux/globalSlice";
 import { Sent } from "./features/communication/pages/Sent";
 import StartTest from "./features/practice/pages/StartTest";
+import Profile from "./features/profile/Profile";
 
 interface IAppProps {}
 
@@ -25,7 +26,7 @@ const App: React.FunctionComponent<IAppProps> = () => {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path={"/"} element={<MainLayout />}>
-          <Route index element={<HomePage />} />
+          <Route index element={<Profile />} />
           <Route path="communication" element={<CommunicationLayout />}>
             <Route index element={<Recommend />} />
             <Route path="received" element={<Received />} />
@@ -34,6 +35,7 @@ const App: React.FunctionComponent<IAppProps> = () => {
           </Route>
           <Route path="practice" element={<PracticePage />} />
           <Route path="practice/test/:id" element={<StartTest />} />
+          {/* <Route path="profile" element={<Profile />} /> */}
         </Route>
         <Route path={"*"} element={<NotFoundPage />} />
       </Routes>

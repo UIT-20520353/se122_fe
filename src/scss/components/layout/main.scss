@@ -83,9 +83,9 @@ $main-bg: #f3f4f6;
       height: 50px;
       border-radius: 50%;
       background-color: #f2f2f2;
-      padding: 10px;
+      // padding: 10px;
       object-position: center;
-      object-fit: contain;
+      object-fit: cover;
       cursor: pointer;
     }
 
@@ -116,7 +116,7 @@ $main-bg: #f3f4f6;
     .dropdown-menu {
       position: absolute;
       right: 0;
-      bottom: -135px;
+      bottom: -90px;
       width: 180px;
       padding: 15px 0;
       background-color: #fff;

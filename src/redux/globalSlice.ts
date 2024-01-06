@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../app/store";
-import { UserProfileModel } from "../models/auth";
+import { UserProfileModel } from "../models/user";
 import { removeLocalStorage } from "../utils/localStorage";
 import {
   ACCESS_TOKEN_LOCAL_STORAGE_KEY,

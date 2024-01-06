@@ -90,7 +90,8 @@ const ChatBox: React.FunctionComponent<ChatBoxProps> = ({
       <div className="chatbox__header">
         <MdArrowBack className="icon" onClick={onCloseChatBox} />
         <span className="name">{`${user.firstName} ${user.lastName}`}</span>
-        <MdCall className="icon" />
+        {/* <MdCall className="icon" /> */}
+        <span></span>
       </div>
       <div className="chatbox__content">
         {messages.map((m) => (

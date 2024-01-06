@@ -6,8 +6,14 @@ import { setLoading } from "../../../redux/globalSlice";
 import testApi from "../../../api/testApi";
 import { TestDetailModel } from "../../../models/test";
 import { useEffectOnce } from "usehooks-ts";
+import Question from "../components/Question";
 
 interface StartTestProps {}
+
+interface ResultProps {
+  questionId: number;
+  answerId: number;
+}
 
 const StartTest: React.FunctionComponent<StartTestProps> = () => {
   const dispatch = useAppDispatch();
@@ -17,6 +23,19 @@ const StartTest: React.FunctionComponent<StartTestProps> = () => {
 
   const [test, setTest] = useState<TestDetailModel | null>(null);
   const [seconds, setSeconds] = useState<number>(0);
+  const [result, setResult] = useState<ResultProps[]>([]);
+
+  const handleResultClick = (questionId: number, answerId: number) => {
+    setResult((prev) => {
+      const temp = prev.filter((r) => r.questionId !== questionId);
+      temp.push({ questionId, answerId });
+      return temp;
+    });
+  };
+
+  const handleSubmit = async () => {
+    console.log(result);
+  };
 
   const fetchData = async () => {
     if (isNaN(Number(id))) {
@@ -67,49 +86,13 @@ const StartTest: React.FunctionComponent<StartTestProps> = () => {
           {test.questions
             .filter((q) => q.type === "LISTENING")
             .map((question, index) => (
-              <div key={`question-${question.id}`} className="question">
-                <audio autoPlay={false} controls src={question.resource} />
-                <p>
-                  <span
-                    style={{ fontWeight: 600, fontSize: "16px" }}
-                  >{`Question ${index + 1}: `}</span>
-                  {question.question}
-                </p>
-                <div className="answers">
-                  <span style={{ fontWeight: 600 }}>Answers: </span>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "start",
-                      gap: "5px",
-                    }}
-                  >
-                    {question.answers.map((answer) => (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          alignItems: "center",
-                          gap: "5px",
-                        }}
-                      >
-                        <input
-                          type="radio"
-                          id={`question-${question.id}-answer-${answer.id}`}
-                          name={`question-${question.id}`}
-                        />
-                        <label
-                          htmlFor={`question-${question.id}-answer-${answer.id}`}
-                          style={{ fontSize: "16px" }}
-                        >
-                          {answer.content}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <Question
+                key={`question-${question.id}`}
+                question={question}
+                index={index}
+                type={"LISTENING"}
+                handleResultClick={handleResultClick}
+              />
             ))}
         </div>
         <div className="reading">
@@ -126,48 +109,13 @@ const StartTest: React.FunctionComponent<StartTestProps> = () => {
           {test.questions
             .filter((q) => q.type === "READING")
             .map((question, index) => (
-              <div key={`question-${question.id}`} className="question">
-                <p>
-                  <span
-                    style={{ fontWeight: 600, fontSize: "16px" }}
-                  >{`Question ${index + 1}: `}</span>
-                  {question.question}
-                </p>
-                <div className="answers">
-                  <span style={{ fontWeight: 600 }}>Answers: </span>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "start",
-                      gap: "5px",
-                    }}
-                  >
-                    {question.answers.map((answer) => (
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          alignItems: "center",
-                          gap: "5px",
-                        }}
-                      >
-                        <input
-                          type="radio"
-                          id={`question-${question.id}-answer-${answer.id}`}
-                          name={`question-${question.id}`}
-                        />
-                        <label
-                          htmlFor={`question-${question.id}-answer-${answer.id}`}
-                          style={{ fontSize: "16px" }}
-                        >
-                          {answer.content}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <Question
+                key={`question-${question.id}`}
+                question={question}
+                index={index}
+                type={"READING"}
+                handleResultClick={handleResultClick}
+              />
             ))}
         </div>
       </div>
@@ -175,7 +123,9 @@ const StartTest: React.FunctionComponent<StartTestProps> = () => {
       <div className="test-detail__footer">
         <div className="card-submit">
           <span>{`Time: ${formatTime(seconds)}`}</span>
-          <button className="submit">Submit</button>
+          <button className="submit" onClick={handleSubmit}>
+            Submit
+          </button>
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 import ChatBox from "../components/ChatBox";
-import { useAppDispatch } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { useHandleResponseError } from "../../../hooks/useHandleResponseError";
-import { setLoading } from "../../../redux/globalSlice";
+import { selectUserId, setLoading } from "../../../redux/globalSlice";
 import chatroomApi from "../../../api/chatroomApi";
 import { ChatRoomModel } from "../../../models/chatroom";
 import { UserModel } from "../../../models/user";
@@ -21,6 +21,7 @@ interface SelectedRowProps {
 const Chat: React.FunctionComponent<ChatProps> = ({ isOpen, closeModal }) => {
   const dispatch = useAppDispatch();
   const handleResponseError = useHandleResponseError();
+  const userId = useAppSelector(selectUserId);
 
   const divContentRef = useRef<HTMLDivElement>(null);
   const [chatrooms, setChatrooms] = useState<ChatRoomModel[]>([]);
@@ -35,7 +36,9 @@ const Chat: React.FunctionComponent<ChatProps> = ({ isOpen, closeModal }) => {
 
   const fetchData = async () => {
     dispatch(setLoading("ADD"));
-    const { ok, body, error } = await chatroomApi.getChatrooms();
+    const { ok, body, error } = await chatroomApi.getChatrooms({
+      "userId.equals": userId || null,
+    });
     dispatch(setLoading("REMOVE"));
 
     if (ok && body) {

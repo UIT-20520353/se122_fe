@@ -1,7 +1,7 @@
 import React, { Fragment, useRef, useState } from "react";
 import { AiOutlineMessage } from "react-icons/ai";
 import { FiLogOut, FiUser } from "react-icons/fi";
-import { IoNotificationsOutline } from "react-icons/io5";
+// import { IoNotificationsOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { useOnClickOutside } from "usehooks-ts";
 import authApi from "../../api/authApi";
@@ -57,7 +57,7 @@ const Header: React.FunctionComponent<HeaderProps> = () => {
 
         <div className="header__right">
           <div className="header__actions">
-            <IoNotificationsOutline className="header__icon" />
+            {/* <IoNotificationsOutline className="header__icon" /> */}
             <AiOutlineMessage
               className="header__icon have__noti"
               onClick={() => setIsShowChatPage(true)}
@@ -70,15 +70,15 @@ const Header: React.FunctionComponent<HeaderProps> = () => {
             >
               <p>
                 Hello,
-                <span>{` ${profile?.firstName || ""} ${
-                  profile?.lastName || ""
+                <span>{` ${profile?.first_name || ""} ${
+                  profile?.last_name || ""
                 }`}</span>
               </p>
               <p>User</p>
             </div>
             <img
               className="avatar"
-              src={default_avatar}
+              src={profile?.avatar || default_avatar}
               alt="avatar"
               onClick={() => setIsShowProfileMenu(true)}
             />
@@ -88,10 +88,13 @@ const Header: React.FunctionComponent<HeaderProps> = () => {
                 isShowProfileMenu ? "flex" : "hidden"
               }`}
             >
-              <div className="dropdown-menu__item">
+              {/* <div
+                className="dropdown-menu__item"
+                onClick={() => navigate("/profile")}
+              >
                 <FiUser className="text-blue font-20" />
                 <p>Profile</p>
-              </div>
+              </div> */}
               <div className="dropdown-menu__item" onClick={handleLogout}>
                 <FiLogOut className="text-red font-20" />
                 <p>Logout</p>
