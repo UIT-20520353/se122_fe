@@ -12,6 +12,7 @@ import PracticePage from "./features/practice/pages";
 import Register from "./features/register/pages";
 import { selectLoading } from "./redux/globalSlice";
 import { Sent } from "./features/communication/pages/Sent";
+import StartTest from "./features/practice/pages/StartTest";
 
 interface IAppProps {}
 
@@ -32,6 +33,7 @@ const App: React.FunctionComponent<IAppProps> = () => {
             <Route path="friend" element={<Friend />} />
           </Route>
           <Route path="practice" element={<PracticePage />} />
+          <Route path="practice/test/:id" element={<StartTest />} />
         </Route>
         <Route path={"*"} element={<NotFoundPage />} />
       </Routes>
