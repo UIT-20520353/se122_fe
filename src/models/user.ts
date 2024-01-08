@@ -25,4 +25,5 @@ export interface UserProfileModel {
   target: number;
   description: string;
   avatar: string;
+  token: string;
 }

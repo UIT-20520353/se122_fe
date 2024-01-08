@@ -6,7 +6,7 @@ export interface MessageResponse {
 
 export interface MessageRequest {
   message: string;
-  type: "JOIN" | "MESSAGE" | "LEAVE";
+  type: "JOIN" | "MESSAGE" | "LEAVE" | "CALL";
   chatroomId: number;
   userId: number;
 }

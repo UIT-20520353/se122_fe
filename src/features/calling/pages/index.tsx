@@ -1,61 +1,51 @@
-import React from "react";
-import "./Calling.style.css";
-import avt from "../../../assets/images/avt.jpg";
+import React, { useState } from "react";
+import { MeetingProvider } from "@videosdk.live/react-sdk";
+import axios from "axios";
+import { useAppSelector } from "../../../app/hooks";
+import { selectProfile } from "../../../redux/globalSlice";
 
 interface ICallingProps {}
 
 const Calling: React.FunctionComponent<ICallingProps> = () => {
-  return (
-    <>
-      <div className="calling-page">
-        <div className="callingWrapper">
-          <button>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
-              <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
-            </svg>
-            <div>Leave</div>
-          </button>
-          <div className="call secondChild">
-            <img src={avt} alt="avt" />
-          </div>
-          <div className="call">
-            <img src={avt} alt="avt" />
-          </div>
-        </div>
-        <div className="chattingWrapper">
-          <div className="contentMsg">
-            <img src={avt} alt="avt" />
-            <p>
-              But if you wanna cry, cry on my shoulder. If you need someone to
-              care for you. If your feeling sad. But if you wanna cry, cry on my
-              shoulder. If you need someone to care for you. If your feeling
-              sad.But if you wanna cry, cry on my shoulder. If you need someone
-              to care for you. If your feeling sad.But if you wanna cry, cry on
-              my shoulder. If you need someone to care for you. If your feeling
-              sad.But if you wanna cry, cry on my shoulder. If you need someone
-              to care for you. If your feeling sad.But if you wanna cry, cry on
-              my shoulder. If you need someone to care for you. If your feeling
-              sad.But if you wanna cry, cry on my shoulder. If you need someone
-              to care for you. If your feeling sad.But if you wanna cry, cry on
-              my shoulder. If you need someone to care for you. If your feeling
-              sad.But if you wanna cry, cry on my shoulder. If you need someone
-              to care for you. If your feeling sad.
-            </p>
-          </div>
-          <div className="contentMsg right">
-            <img src={avt} alt="avt" />
-            <p>
-              Cry on my shoulder. If you need someone to care for you. If your
-              feeling sad...
-            </p>
-          </div>
-        </div>
-        <div className="chattingInput">
-          <input type="text" placeholder="Type message here"/>
-        </div>
-      </div>
-    </>
+  const profile = useAppSelector(selectProfile);
+  const [roomId, setRoomId] = useState<string | null>(null);
+
+  const handleCreateRoom = async () => {
+    const response = await axios.post(
+      "https://api.videosdk.live/v2/rooms",
+      JSON.stringify({}),
+      {
+        headers: {
+          Authorization: `${profile?.token || ""}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    setRoomId(response.data.roomId);
+  };
+
+  return roomId ? (
+    <MeetingProvider
+      config={{
+        meetingId: roomId,
+        micEnabled: true,
+        webcamEnabled: true,
+        name: `${profile?.first_name || ""} ${profile?.last_name || ""}`,
+        participantId: `${profile?.id || 0}`,
+        multiStream: true,
+        mode: "CONFERENCE", // "CONFERENCE" || "VIEWER"
+        metaData: {},
+      }}
+      token={profile?.token || ""}
+      joinWithoutUserInteraction // Boolean
+    >
+      <div className="call-page">dasdadasd</div>
+    </MeetingProvider>
+  ) : (
+    <div>
+      <button onClick={handleCreateRoom}>Create room</button>
+    </div>
   );
 };
 

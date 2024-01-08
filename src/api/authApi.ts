@@ -3,8 +3,8 @@ import {
   LoginRequestModel,
   LoginResponseModel,
   RegisterRequestModel,
-  UserProfileModel,
 } from "../models/auth";
+import { UserProfileModel } from "../models/user";
 import { HttpResponse } from "../models/http";
 import { getLocalStorage } from "../utils/localStorage";
 import axiosClient, { handleRequest } from "./axiosClient";

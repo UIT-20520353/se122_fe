@@ -43,9 +43,9 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
       "http://localhost:8080/ws",
       () => {
         console.log("Websocket connected");
-        stompClient.subcribe(`/user/${profile?.id || 0}/private`, (message) => {
-          console.log(message);
-        });
+        // stompClient.subcribe(`/user/${profile?.id || 0}/notification`, (message) => {
+        //   console.log(message);
+        // });
       },
       (error) => {
         console.error(error);
@@ -59,12 +59,12 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
 
   useEffect(() => {
     if (profile) {
-      stompClient.subcribe(`/user/${profile.id}/private`, (message) => {
+      stompClient.subcribe(`/user/${profile.id}/notification`, (message) => {
         console.log(message);
       });
     }
     return () => {
-      stompClient.ubsubcribe(`/user/${profile?.id || 0}/private`);
+      stompClient.ubsubcribe(`/user/${profile?.id || 0}/notification`);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile?.id]);

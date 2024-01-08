@@ -53,6 +53,15 @@ const ChatBox: React.FunctionComponent<ChatBoxProps> = ({
     }
   };
 
+  const handleSendRequestCall = () => {
+    stompClient.send({
+      chatroomId,
+      message: "",
+      type: "CALL",
+      userId,
+    });
+  };
+
   const fetchData = async () => {
     dispatch(setLoading("ADD"));
     const { ok, body, error } = await messageApi.getMessages(
@@ -90,12 +99,12 @@ const ChatBox: React.FunctionComponent<ChatBoxProps> = ({
       <div className="chatbox__header">
         <MdArrowBack className="icon" onClick={onCloseChatBox} />
         <span className="name">{`${user.firstName} ${user.lastName}`}</span>
-        {/* <MdCall className="icon" /> */}
-        <span></span>
+        <MdCall className="icon" onClick={handleSendRequestCall} />
       </div>
       <div className="chatbox__content">
-        {messages.map((m) => (
+        {messages.map((m, index) => (
           <div
+            key={`message-${index}`}
             className={classNames("message", {
               left: m.userId === userId,
             })}

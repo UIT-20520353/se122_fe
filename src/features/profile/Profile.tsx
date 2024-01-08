@@ -22,6 +22,7 @@ import {
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Link } from "react-router-dom";
 
 interface ProfileProps {}
 
@@ -62,6 +63,7 @@ const initialState: UserProfileModel = {
   target: 0,
   description: "",
   avatar: "",
+  token: "",
 };
 
 const Profile: React.FunctionComponent<ProfileProps> = () => {
@@ -387,6 +389,8 @@ const Profile: React.FunctionComponent<ProfileProps> = () => {
           </div>
         </form>
       </Modal>
+
+      <Link to={"/call"}>Call</Link>
     </div>
   );
 };
