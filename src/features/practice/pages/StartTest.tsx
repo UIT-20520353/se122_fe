@@ -71,6 +71,8 @@ const StartTest: React.FunctionComponent<StartTestProps> = () => {
     } else {
       handlResponseError(error);
     }
+
+    navigate("/practice");
   };
 
   const fetchData = async () => {

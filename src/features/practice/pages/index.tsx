@@ -83,10 +83,10 @@ const PracticePage: React.FunctionComponent<PracticePageProps> = () => {
                   {test.level === "EASY" ? "Easy" : "Medium"}
                 </Tag>
               </p>
-              <div className="amount-participant">
+              {/* <div className="amount-participant">
                 <FaUserEdit />
                 <span>123</span>
-              </div>
+              </div> */}
             </div>
             <button className="btn-start" onClick={() => handleStart(test.id)}>
               Start
