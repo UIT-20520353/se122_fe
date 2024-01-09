@@ -8,7 +8,11 @@ import { useAppSelector } from "../../../app/hooks";
 import stompClient from "../../../components/socket/stompClient";
 import { MessageResponse } from "../../../models/message";
 import { UserModel } from "../../../models/user";
-import { selectUserId, setLoading } from "../../../redux/globalSlice";
+import {
+  selectUserId,
+  setLoading,
+  setRequestToCall,
+} from "../../../redux/globalSlice";
 import moment from "moment";
 import { useAppDispatch } from "../../../app/hooks";
 import { useHandleResponseError } from "../../../hooks/useHandleResponseError";
@@ -54,6 +58,17 @@ const ChatBox: React.FunctionComponent<ChatBoxProps> = ({
   };
 
   const handleSendRequestCall = () => {
+    dispatch(
+      setRequestToCall({
+        chatroomId,
+        name: `${user.firstName} ${user.lastName}`,
+        avatar: user.avatar,
+        mic: false,
+        camera: false,
+        userId,
+      })
+    );
+
     stompClient.send({
       chatroomId,
       message: "",

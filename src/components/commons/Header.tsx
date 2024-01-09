@@ -1,6 +1,6 @@
 import React, { Fragment, useRef, useState } from "react";
 import { AiOutlineMessage } from "react-icons/ai";
-import { FiLogOut, FiUser } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
 // import { IoNotificationsOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { useOnClickOutside } from "usehooks-ts";
@@ -8,9 +8,9 @@ import authApi from "../../api/authApi";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import default_avatar from "../../assets/images/avatar.png";
 import logo from "../../assets/images/logo.png";
-import { logout, selectProfile, setLoading } from "../../redux/globalSlice";
-import { useHandleResponseError } from "../../hooks/useHandleResponseError";
 import Chat from "../../features/chat/pages";
+import { useHandleResponseError } from "../../hooks/useHandleResponseError";
+import { logout, selectProfile, setLoading } from "../../redux/globalSlice";
 
 interface HeaderProps {}
 

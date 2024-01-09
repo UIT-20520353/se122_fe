@@ -3,6 +3,7 @@ import { MeetingProvider } from "@videosdk.live/react-sdk";
 import axios from "axios";
 import { useAppSelector } from "../../../app/hooks";
 import { selectProfile } from "../../../redux/globalSlice";
+import MeetingView from "../components/MeetingView";
 
 interface ICallingProps {}
 
@@ -40,7 +41,7 @@ const Calling: React.FunctionComponent<ICallingProps> = () => {
       token={profile?.token || ""}
       joinWithoutUserInteraction // Boolean
     >
-      <div className="call-page">dasdadasd</div>
+      <MeetingView onMeetingLeave={() => setRoomId(null)} meetingId={roomId} />
     </MeetingProvider>
   ) : (
     <div>

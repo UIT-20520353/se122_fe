@@ -6,7 +6,15 @@ export interface MessageResponse {
 
 export interface MessageRequest {
   message: string;
-  type: "JOIN" | "MESSAGE" | "LEAVE" | "CALL";
+  type: "JOIN" | "MESSAGE" | "LEAVE" | "CALL" | "CANCEL" | "REJECT";
   chatroomId: number;
   userId: number;
+}
+
+export interface CallRequestResponse {
+  chatroomId: number;
+  name: string;
+  avatar: string;
+  userId: number;
+  type: "JOIN" | "MESSAGE" | "LEAVE" | "CALL" | "CANCEL" | "REJECT";
 }
