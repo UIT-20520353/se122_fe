@@ -1,35 +1,36 @@
-import React, { useState } from "react";
 import { MeetingProvider } from "@videosdk.live/react-sdk";
-import axios from "axios";
-import { useAppSelector } from "../../../app/hooks";
-import { selectProfile } from "../../../redux/globalSlice";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffectOnce } from "usehooks-ts";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import {
+  selectProfile,
+  selectisStartedCall,
+  setStartedCall,
+} from "../../../redux/globalSlice";
 import MeetingView from "../components/MeetingView";
 
 interface ICallingProps {}
 
 const Calling: React.FunctionComponent<ICallingProps> = () => {
   const profile = useAppSelector(selectProfile);
-  const [roomId, setRoomId] = useState<string | null>(null);
+  const isStartedCall = useAppSelector(selectisStartedCall);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  const handleCreateRoom = async () => {
-    const response = await axios.post(
-      "https://api.videosdk.live/v2/rooms",
-      JSON.stringify({}),
-      {
-        headers: {
-          Authorization: `${profile?.token || ""}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    setRoomId(response.data.roomId);
+  const onLeaveCall = () => {
+    dispatch(setStartedCall(null));
+    navigate("/");
   };
 
-  return roomId ? (
+  useEffectOnce(() => {
+    if (!isStartedCall) navigate("/");
+  });
+
+  return isStartedCall ? (
     <MeetingProvider
       config={{
-        meetingId: roomId,
+        meetingId: isStartedCall,
         micEnabled: true,
         webcamEnabled: true,
         name: `${profile?.first_name || ""} ${profile?.last_name || ""}`,
@@ -41,13 +42,9 @@ const Calling: React.FunctionComponent<ICallingProps> = () => {
       token={profile?.token || ""}
       joinWithoutUserInteraction // Boolean
     >
-      <MeetingView onMeetingLeave={() => setRoomId(null)} meetingId={roomId} />
+      <MeetingView onMeetingLeave={onLeaveCall} meetingId={isStartedCall} />
     </MeetingProvider>
-  ) : (
-    <div>
-      <button onClick={handleCreateRoom}>Create room</button>
-    </div>
-  );
+  ) : null;
 };
 
 export default Calling;

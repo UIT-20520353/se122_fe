@@ -7,9 +7,11 @@ import {
   selectCallNotifcation,
   selectProfile,
   selectUserId,
+  selectisStartedCall,
   setCallNotification,
   setLoading,
   setRequestToCall,
+  setStartedCall,
   updateUserProfile,
 } from "../../redux/globalSlice";
 import { useEffectOnce } from "usehooks-ts";
@@ -21,16 +23,19 @@ import { CallRequestResponse } from "../../models/message";
 import classNames from "classnames";
 import { MdCall } from "react-icons/md";
 import { FaXmark } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 interface MainLayoutProps {}
 
 const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
   useProtectedRoute();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const handleResponseError = useHandleResponseError();
   const userId = useAppSelector(selectUserId);
   const profile = useAppSelector(selectProfile);
   const callNotification = useAppSelector(selectCallNotifcation);
+  const isStartedCall = useAppSelector(selectisStartedCall);
 
   const handleRejectCall = () => {
     dispatch(setCallNotification(null));
@@ -38,6 +43,15 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
       chatroomId: callNotification?.chatroomId || 0,
       message: "",
       type: "REJECT",
+      userId,
+    });
+  };
+
+  const handleAcceptCall = () => {
+    stompClient.send({
+      chatroomId: callNotification?.chatroomId || 0,
+      message: "",
+      type: "ACCEPT",
       userId,
     });
   };
@@ -89,6 +103,10 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
             dispatch(setCallNotification(null));
           else if (message.type === "REJECT") {
             dispatch(setRequestToCall(null));
+          } else if (message.type === "ACCEPT") {
+            dispatch(setCallNotification(null));
+            dispatch(setRequestToCall(null));
+            dispatch(setStartedCall(message.roomId));
           }
         }
       );
@@ -98,6 +116,10 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile?.id]);
+
+  useEffect(() => {
+    if (isStartedCall) navigate("/call");
+  }, [isStartedCall, navigate]);
 
   return (
     <Fragment>
@@ -117,7 +139,7 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
             <span className="name">{callNotification.name}</span>
             <span className="calling-label">send request to call...</span>
             <div className="modal-call-notification__footer">
-              <button className="btn-accept">
+              <button className="btn-accept" onClick={handleAcceptCall}>
                 <MdCall />
               </button>
               <button className="btn-cancel" onClick={handleRejectCall}>

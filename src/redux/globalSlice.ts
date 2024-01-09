@@ -23,6 +23,7 @@ interface InitialStateProps {
   profile: UserProfileModel | null;
   requestToCall: RequestToCallProps | null;
   callNotification: CallRequestResponse | null;
+  isStartedCall: string | null;
 }
 
 const initialState: InitialStateProps = {
@@ -31,6 +32,7 @@ const initialState: InitialStateProps = {
   profile: null,
   requestToCall: null,
   callNotification: null,
+  isStartedCall: null,
 };
 
 const globalSlice = createSlice({
@@ -85,6 +87,9 @@ const globalSlice = createSlice({
     ) => {
       state.callNotification = action.payload;
     },
+    setStartedCall: (state, action: PayloadAction<string | null>) => {
+      state.isStartedCall = action.payload;
+    },
   },
 });
 
@@ -97,6 +102,7 @@ export const {
   toggleCameraCall,
   toggleMicCall,
   setCallNotification,
+  setStartedCall,
 } = globalSlice.actions;
 
 // NOTE: Selectors
@@ -107,6 +113,8 @@ export const selectRequestToCall = (state: RootState) =>
   state.global.requestToCall;
 export const selectCallNotifcation = (state: RootState) =>
   state.global.callNotification;
+export const selectisStartedCall = (state: RootState) =>
+  state.global.isStartedCall;
 
 // NOTE: Reducer
 const globalReducer = globalSlice.reducer;

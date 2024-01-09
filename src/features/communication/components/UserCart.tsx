@@ -113,7 +113,7 @@ const UserCart: React.FunctionComponent<UserCartProps> = ({
               </div>
               <div className="column">
                 <FaHome className="gender-icon" />
-                <span>{user.address}</span>
+                <span className="line-clamp-1 mw-60">{user.address}</span>
               </div>
             </div>
           </div>

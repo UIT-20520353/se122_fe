@@ -237,3 +237,14 @@ li {
     font-weight: 500;
   }
 }
+
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.mw-60 {
+  max-width: 150px;
+}
