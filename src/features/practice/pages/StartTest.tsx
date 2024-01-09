@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { useHandleResponseError } from "../../../hooks/useHandleResponseError";
 import { useNavigate, useParams } from "react-router-dom";
-import { setLoading } from "../../../redux/globalSlice";
+import { selectUserId, setLoading } from "../../../redux/globalSlice";
 import testApi from "../../../api/testApi";
 import { TestDetailModel } from "../../../models/test";
 import { useEffectOnce } from "usehooks-ts";
 import Question from "../components/Question";
+import { showSuccessModal } from "../../../components/modals/CommonModals";
 
 interface StartTestProps {}
 
@@ -19,6 +20,7 @@ const StartTest: React.FunctionComponent<StartTestProps> = () => {
   const dispatch = useAppDispatch();
   const handlResponseError = useHandleResponseError();
   const navigate = useNavigate();
+  const userId = useAppSelector(selectUserId);
   const { id } = useParams();
 
   const [test, setTest] = useState<TestDetailModel | null>(null);
@@ -34,7 +36,41 @@ const StartTest: React.FunctionComponent<StartTestProps> = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(result);
+    if (!test) return;
+    dispatch(setLoading("ADD"));
+
+    let amountRight: number = 0;
+    test.questions.forEach((question) => {
+      question.answers.forEach((answer) => {
+        const checkAnswer = result.find(
+          (r) =>
+            r.answerId === answer.id &&
+            r.questionId === question.id &&
+            answer.isResult
+        );
+        if (checkAnswer) amountRight++;
+      });
+    });
+
+    const { ok, error } = await testApi.submitTest({
+      userId,
+      testId: test.id,
+      result: amountRight / test.questions.length,
+      time: seconds,
+    });
+    dispatch(setLoading("REMOVE"));
+
+    if (ok) {
+      showSuccessModal({
+        title: "Notification",
+        content: `You get right ${(amountRight / test.questions.length).toFixed(
+          2
+        )}% of this test.`,
+        onOk: () => {},
+      });
+    } else {
+      handlResponseError(error);
+    }
   };
 
   const fetchData = async () => {

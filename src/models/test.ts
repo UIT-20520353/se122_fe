@@ -15,3 +15,10 @@ export interface TestDetailModel {
   image: string | null;
   paragraph: string | null;
 }
+
+export interface SubmitTestRequest {
+  userId: number;
+  testId: number;
+  result: number;
+  time: number;
+}
