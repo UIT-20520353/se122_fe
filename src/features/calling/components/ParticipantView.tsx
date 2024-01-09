@@ -40,30 +40,31 @@ const ParticipantView: React.FunctionComponent<ParticipantViewProps> = ({
   }, [micStream, micOn]);
 
   return (
-    <div key={participantId}>
-      <p>
-        Participant: {displayName} | Webcam: {webcamOn ? "ON" : "OFF"} | Mic:{" "}
-        {micOn ? "ON" : "OFF"}
-      </p>
+    <div className="participant-view" key={participantId}>
       <audio ref={micRef} autoPlay muted={isLocal} />
-      {webcamOn && (
+      {webcamOn ? (
         <ReactPlayer
-          //
           playsinline // very very imp prop
           pip={false}
           light={false}
           controls={false}
           muted={true}
           playing={true}
-          //
+          width={"100%"}
+          height={"100%"}
           url={videoStream}
-          //
-          height={"200px"}
-          width={"300px"}
           onError={(err) => {
             console.log(err, "participant video error");
           }}
         />
+      ) : (
+        <div className="view-no-web-cam">
+          <div className="content">
+            <p className="text-2xl text-white">
+              {String(displayName).charAt(0).toUpperCase()}
+            </p>
+          </div>
+        </div>
       )}
     </div>
   );

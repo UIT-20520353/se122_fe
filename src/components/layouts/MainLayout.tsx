@@ -1,8 +1,17 @@
+import { MeetingProvider } from "@videosdk.live/react-sdk";
+import classNames from "classnames";
 import React, { Fragment, useEffect } from "react";
-import { Header, Sidebar } from "../commons";
+import { FaXmark } from "react-icons/fa6";
+import { MdCall } from "react-icons/md";
 import { Outlet } from "react-router";
-import useProtectedRoute from "../../hooks/useProtectedRoute";
+import { Frame } from "stompjs";
+import { useEffectOnce } from "usehooks-ts";
+import authApi from "../../api/authApi";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import MeetingView from "../../features/calling/components/MeetingView";
+import { useHandleResponseError } from "../../hooks/useHandleResponseError";
+import useProtectedRoute from "../../hooks/useProtectedRoute";
+import { CallRequestResponse } from "../../models/message";
 import {
   selectCallNotifcation,
   selectProfile,
@@ -14,22 +23,13 @@ import {
   setStartedCall,
   updateUserProfile,
 } from "../../redux/globalSlice";
-import { useEffectOnce } from "usehooks-ts";
-import authApi from "../../api/authApi";
-import { useHandleResponseError } from "../../hooks/useHandleResponseError";
+import { Header, Sidebar } from "../commons";
 import stompClient from "../socket/stompClient";
-import { Frame } from "stompjs";
-import { CallRequestResponse } from "../../models/message";
-import classNames from "classnames";
-import { MdCall } from "react-icons/md";
-import { FaXmark } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
 
 interface MainLayoutProps {}
 
 const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
   useProtectedRoute();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const handleResponseError = useHandleResponseError();
   const userId = useAppSelector(selectUserId);
@@ -56,6 +56,10 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
     });
   };
 
+  const onLeaveCall = () => {
+    dispatch(setStartedCall(null));
+  };
+
   const fetchData = async () => {
     dispatch(setLoading("ADD"));
 
@@ -72,15 +76,11 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
 
   useEffectOnce(() => {
     fetchData();
-    console.log("a");
 
     stompClient.connect(
       "http://localhost:8080/ws",
       () => {
         console.log("Websocket connected");
-        // stompClient.subcribe(`/user/${profile?.id || 0}/notification`, (message) => {
-        //   console.log(message);
-        // });
       },
       (error) => {
         console.error(error);
@@ -117,10 +117,6 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile?.id]);
 
-  useEffect(() => {
-    if (isStartedCall) navigate("/call");
-  }, [isStartedCall, navigate]);
-
   return (
     <Fragment>
       <div className="main-layout">
@@ -133,7 +129,7 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
           show: callNotification,
         })}
       >
-        {callNotification && (
+        {callNotification && !isStartedCall && (
           <div className="modal-call-notification">
             <img src={callNotification.avatar} />
             <span className="name">{callNotification.name}</span>
@@ -149,6 +145,24 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
           </div>
         )}
       </div>
+      {isStartedCall && (
+        <MeetingProvider
+          config={{
+            meetingId: isStartedCall,
+            micEnabled: true,
+            webcamEnabled: true,
+            name: `${profile?.first_name || ""} ${profile?.last_name || ""}`,
+            participantId: `${profile?.id || 0}`,
+            multiStream: true,
+            mode: "CONFERENCE", // "CONFERENCE" || "VIEWER"
+            metaData: {},
+          }}
+          token={profile?.token || ""}
+          joinWithoutUserInteraction // Boolean
+        >
+          <MeetingView onMeetingLeave={onLeaveCall} />
+        </MeetingProvider>
+      )}
     </Fragment>
   );
 };

@@ -1,4 +1,3 @@
-import { MeetingProvider } from "@videosdk.live/react-sdk";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffectOnce } from "usehooks-ts";
@@ -27,24 +26,7 @@ const Calling: React.FunctionComponent<ICallingProps> = () => {
     if (!isStartedCall) navigate("/");
   });
 
-  return isStartedCall ? (
-    <MeetingProvider
-      config={{
-        meetingId: isStartedCall,
-        micEnabled: true,
-        webcamEnabled: true,
-        name: `${profile?.first_name || ""} ${profile?.last_name || ""}`,
-        participantId: `${profile?.id || 0}`,
-        multiStream: true,
-        mode: "CONFERENCE", // "CONFERENCE" || "VIEWER"
-        metaData: {},
-      }}
-      token={profile?.token || ""}
-      joinWithoutUserInteraction // Boolean
-    >
-      <MeetingView onMeetingLeave={onLeaveCall} meetingId={isStartedCall} />
-    </MeetingProvider>
-  ) : null;
+  return null;
 };
 
 export default Calling;

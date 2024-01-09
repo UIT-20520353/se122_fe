@@ -1,28 +1,27 @@
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Modal } from "antd";
 import React, { useEffect, useRef, useState } from "react";
-import { useAppDispatch } from "../../app/hooks";
-import { setLoading, updateUserProfile } from "../../redux/globalSlice";
-import { useEffectOnce } from "usehooks-ts";
-import profileApi from "../../api/profileApi";
-import { useHandleResponseError } from "../../hooks/useHandleResponseError";
-import { UserProfileModel } from "../../models/user";
+import { useForm } from "react-hook-form";
 import {
-  FaUser,
+  FaBirthdayCake,
+  FaFemale,
   FaHome,
   FaMale,
-  FaFemale,
-  FaBirthdayCake,
+  FaUser,
 } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
 import { TbTargetArrow } from "react-icons/tb";
-import { Modal } from "antd";
+import { useEffectOnce } from "usehooks-ts";
+import * as yup from "yup";
+import profileApi from "../../api/profileApi";
+import { useAppDispatch } from "../../app/hooks";
 import {
   showErrorModal,
   showSuccessModal,
 } from "../../components/modals/CommonModals";
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Link } from "react-router-dom";
+import { useHandleResponseError } from "../../hooks/useHandleResponseError";
+import { UserProfileModel } from "../../models/user";
+import { setLoading, updateUserProfile } from "../../redux/globalSlice";
 
 interface ProfileProps {}
 
@@ -389,8 +388,6 @@ const Profile: React.FunctionComponent<ProfileProps> = () => {
           </div>
         </form>
       </Modal>
-
-      <Link to={"/call"}>Call</Link>
     </div>
   );
 };

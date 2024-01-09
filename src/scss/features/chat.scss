@@ -445,3 +445,128 @@
     }
   }
 }
+
+.overlay-calling {
+  width: 100%;
+  min-height: 100vh;
+
+  background-color: rgba(0, 0, 0, 0.9);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 4500;
+
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &.show {
+    display: flex;
+  }
+}
+
+.calling {
+  width: 100%;
+  height: 60%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  position: relative;
+
+  &-controls {
+    position: absolute;
+    bottom: 10px;
+    z-index: 4900;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+
+    .leave-call {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background-color: #d90000;
+      cursor: pointer;
+      border: 0;
+      outline: none;
+      transition: all 0.3s;
+
+      &:hover {
+        background-color: #8d0801;
+      }
+
+      svg {
+        font-size: 20px;
+        color: #fff;
+      }
+    }
+
+    .toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      cursor: pointer;
+      border: 0;
+      outline: none;
+      transition: all 0.3s;
+      background-color: #8b8c89;
+
+      svg {
+        font-size: 20px;
+        color: #fff;
+
+        &.muted {
+          color: #bfc0c0;
+        }
+      }
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+.participant-view {
+  width: 100%;
+
+  &:first-child {
+    border-right: 1px solid #fff;
+  }
+
+  video {
+    object-fit: cover;
+  }
+
+  .view-no-web-cam {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1f2937;
+
+    .content {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      p {
+        font-size: 1.5rem; /* 24px */
+        line-height: 2rem; /* 32px */
+        font-weight: 600;
+      }
+    }
+  }
+}
