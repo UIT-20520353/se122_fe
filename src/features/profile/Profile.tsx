@@ -10,7 +10,6 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
-import { TbTargetArrow } from "react-icons/tb";
 import { useEffectOnce } from "usehooks-ts";
 import * as yup from "yup";
 import profileApi from "../../api/profileApi";
@@ -36,8 +35,7 @@ const validationSchema = yup.object().shape({
     .min(5, "Please enter an age between 5 and 70.")
     .max(70, "Please enter an age between 5 and 70.")
     .typeError("Age must be a number"),
-  overall: yup.number().min(0).required("Gender is required!"),
-  target: yup.number().min(0).required("Gender is required!"),
+  level: yup.string(),
 });
 
 export interface UpdateFormProps {
@@ -46,8 +44,6 @@ export interface UpdateFormProps {
   address: string;
   gender: number;
   age: number;
-  overall: number;
-  target: number;
 }
 
 const initialState: UserProfileModel = {
@@ -58,11 +54,10 @@ const initialState: UserProfileModel = {
   address: "",
   gender: "",
   age: 0,
-  overall: 0,
-  target: 0,
   description: "",
   avatar: "",
   token: "",
+  level: "A1",
 };
 
 const Profile: React.FunctionComponent<ProfileProps> = () => {
@@ -163,8 +158,6 @@ const Profile: React.FunctionComponent<ProfileProps> = () => {
       setValue("address", profile.address);
       setValue("gender", profile.gender === "Male" ? 1 : 0);
       setValue("age", profile.age);
-      setValue("overall", profile.overall);
-      setValue("target", profile.target);
     } else {
       reset();
     }
@@ -211,22 +204,16 @@ const Profile: React.FunctionComponent<ProfileProps> = () => {
             <FaBirthdayCake style={{ fontSize: "24px" }} />
             <span style={{ fontSize: "16px" }}>{profile.age}</span>
           </div>
-          <div className="flex-row items-center gap-2">
-            <TbTargetArrow style={{ fontSize: "24px" }} />
-            <span
-              style={{ fontSize: "16px" }}
-            >{`Overall ${profile.overall}`}</span>
-          </div>
-          <div className="flex-row items-center gap-2">
-            <TbTargetArrow style={{ fontSize: "24px" }} />
-            <span
-              style={{ fontSize: "16px" }}
-            >{`Target ${profile.target}`}</span>
-          </div>
         </div>
       </div>
       <div className="profile-page__description">
         <p>{profile.description || "No description"}</p>
+      </div>
+      <div className="profile-page__posts">
+        <div className="profile-page__posts__header">
+          <h3>Videos</h3>
+          <button>Upload video</button>
+        </div>
       </div>
 
       <Modal
@@ -333,54 +320,6 @@ const Profile: React.FunctionComponent<ProfileProps> = () => {
             </select>
             {errors.gender && (
               <span className="error">{errors.gender.message}</span>
-            )}
-          </div>
-          <div className="column">
-            <label htmlFor="select__overall">Overall</label>
-            <select id="select__overall" {...register("overall")}>
-              <option value={0}>0</option>
-              <option value={0.5}>0.5</option>
-              <option value={1.0}>1</option>
-              <option value={1.5}>1.5</option>
-              <option value={2.0}>2</option>
-              <option value={2.5}>2.5</option>
-              <option value={3.0}>3</option>
-              <option value={3.5}>3.5</option>
-              <option value={4.0}>4</option>
-              <option value={4.5}>4.5</option>
-              <option value={5.0}>5</option>
-              <option value={5.5}>5.5</option>
-              <option value={6.0}>6</option>
-              <option value={6.5}>6.5</option>
-              <option value={7.0}>7</option>
-              <option value={7.5}>7.5</option>
-              <option value={8.0}>8</option>
-              <option value={8.5}>8.5</option>
-              <option value={9.0}>9</option>
-            </select>
-            {errors.overall && (
-              <span className="error">{errors.overall.message}</span>
-            )}
-          </div>
-          <div className="column">
-            <label htmlFor="select__target">Target</label>
-            <select id="select__target" {...register("target")}>
-              <option value={3.0}>3</option>
-              <option value={3.5}>3.5</option>
-              <option value={4.0}>4</option>
-              <option value={4.5}>4.5</option>
-              <option value={5.0}>5</option>
-              <option value={5.5}>5.5</option>
-              <option value={6.0}>6</option>
-              <option value={6.5}>6.5</option>
-              <option value={7.0}>7</option>
-              <option value={7.5}>7.5</option>
-              <option value={8.0}>8</option>
-              <option value={8.5}>8.5</option>
-              <option value={9.0}>9</option>
-            </select>
-            {errors.target && (
-              <span className="error">{errors.target.message}</span>
             )}
           </div>
           <div className="column col-span-2">
