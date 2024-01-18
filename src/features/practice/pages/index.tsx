@@ -1,15 +1,24 @@
+import { Pagination, Tag } from "antd";
 import React, { useEffect, useState } from "react";
-import { useAppDispatch } from "../../../app/hooks";
+import { useNavigate } from "react-router-dom";
+import testApi from "../../../api/testApi";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { showConfirmModal } from "../../../components/modals/CommonModals";
 import { useHandleResponseError } from "../../../hooks/useHandleResponseError";
 import { TestModel } from "../../../models/test";
-import { setLoading } from "../../../redux/globalSlice";
-import testApi from "../../../api/testApi";
-import { Pagination, Tag } from "antd";
-import { FaUserEdit } from "react-icons/fa";
-import { showConfirmModal } from "../../../components/modals/CommonModals";
-import { useNavigate } from "react-router-dom";
+import { selectProfile, setLoading } from "../../../redux/globalSlice";
 
 interface PracticePageProps {}
+
+const getLevels = (level: string | undefined) => {
+  if (!level) return "A1,A2,B1,B2,C1,C2";
+  if (level === "A1") return "A1";
+  if (level === "A2") return "A1,A2";
+  if (level === "B1") return "A1,A2,B1";
+  if (level === "B2") return "A1,A2,B1,B2";
+  if (level === "C1") return "A1,A2,B1,B2,C1";
+  if (level === "C2") return "A1,A2,B1,B2,C1,C2";
+};
 
 interface DataProps {
   tests: TestModel[];
@@ -20,6 +29,7 @@ const PracticePage: React.FunctionComponent<PracticePageProps> = () => {
   const dispatch = useAppDispatch();
   const handlResponseError = useHandleResponseError();
   const navigate = useNavigate();
+  const profile = useAppSelector(selectProfile);
 
   const [page, setPage] = useState<number>(1);
   const [data, setData] = useState<DataProps>({ tests: [], totalUsers: 0 });
@@ -45,6 +55,7 @@ const PracticePage: React.FunctionComponent<PracticePageProps> = () => {
     const { ok, body, error, pagination } = await testApi.getTests({
       size: 3,
       page: page - 1,
+      "level.in": getLevels(profile?.level),
     });
     dispatch(setLoading("REMOVE"));
 
@@ -75,12 +86,18 @@ const PracticePage: React.FunctionComponent<PracticePageProps> = () => {
             >
               <p className="test-name">{test.name}</p>
               <p className="test-level">
-                <span>Level: </span>{" "}
+                <span>Level: </span>
                 <Tag
                   className="tag"
-                  color={test.level === "EASY" ? "success" : "warning"}
+                  color={
+                    ["A1", "A2"].includes(test.level)
+                      ? "success"
+                      : ["B1", "B2"].includes(test.level)
+                      ? "warning"
+                      : "error"
+                  }
                 >
-                  {test.level === "EASY" ? "Easy" : "Medium"}
+                  {test.level}
                 </Tag>
               </p>
               {/* <div className="amount-participant">

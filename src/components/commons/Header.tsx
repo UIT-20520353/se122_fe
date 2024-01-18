@@ -2,6 +2,7 @@ import React, { Fragment, useRef, useState } from "react";
 import { AiOutlineMessage } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
 // import { IoNotificationsOutline } from "react-icons/io5";
+import { FaPhotoVideo } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useOnClickOutside } from "usehooks-ts";
 import authApi from "../../api/authApi";
@@ -88,13 +89,13 @@ const Header: React.FunctionComponent<HeaderProps> = () => {
                 isShowProfileMenu ? "flex" : "hidden"
               }`}
             >
-              {/* <div
+              <div
                 className="dropdown-menu__item"
-                onClick={() => navigate("/profile")}
+                onClick={() => navigate("/videos")}
               >
-                <FiUser className="text-blue font-20" />
-                <p>Profile</p>
-              </div> */}
+                <FaPhotoVideo className="text-blue font-20" />
+                <p>Videos</p>
+              </div>
               <div className="dropdown-menu__item" onClick={handleLogout}>
                 <FiLogOut className="text-red font-20" />
                 <p>Logout</p>

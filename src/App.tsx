@@ -14,6 +14,8 @@ import StartTest from "./features/practice/pages/StartTest";
 import Profile from "./features/profile/Profile";
 import Register from "./features/register/pages";
 import { selectLoading } from "./redux/globalSlice";
+import Videos from "./features/videos/Videos";
+import EntryTest from "./features/entry/EntryTest";
 
 interface IAppProps {}
 
@@ -26,6 +28,7 @@ const App: React.FunctionComponent<IAppProps> = () => {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="call" element={<Calling />} />
+        <Route path="entry-test" element={<EntryTest />} />
         <Route path={"/"} element={<MainLayout />}>
           <Route index element={<Profile />} />
           <Route path="communication" element={<CommunicationLayout />}>
@@ -36,7 +39,7 @@ const App: React.FunctionComponent<IAppProps> = () => {
           </Route>
           <Route path="practice" element={<PracticePage />} />
           <Route path="practice/test/:id" element={<StartTest />} />
-          {/* <Route path="profile" element={<Profile />} /> */}
+          <Route path="videos" element={<Videos />} />
         </Route>
         <Route path={"*"} element={<NotFoundPage />} />
       </Routes>

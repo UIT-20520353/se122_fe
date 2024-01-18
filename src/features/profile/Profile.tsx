@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Modal } from "antd";
+import { Modal, Tag } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -8,6 +8,7 @@ import {
   FaHome,
   FaMale,
   FaUser,
+  FaFlag,
 } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
 import { useEffectOnce } from "usehooks-ts";
@@ -204,16 +205,25 @@ const Profile: React.FunctionComponent<ProfileProps> = () => {
             <FaBirthdayCake style={{ fontSize: "24px" }} />
             <span style={{ fontSize: "16px" }}>{profile.age}</span>
           </div>
+          <div className="flex-row items-center gap-2">
+            <FaFlag style={{ fontSize: "24px" }} />
+            <Tag
+              color={
+                ["A1", "A2"].includes(profile.level)
+                  ? "success"
+                  : ["B1", "B2"].includes(profile.level)
+                  ? "warning"
+                  : "error"
+              }
+              style={{ fontSize: "16px", fontWeight: 600 }}
+            >
+              {profile.level}
+            </Tag>
+          </div>
         </div>
       </div>
       <div className="profile-page__description">
         <p>{profile.description || "No description"}</p>
-      </div>
-      <div className="profile-page__posts">
-        <div className="profile-page__posts__header">
-          <h3>Videos</h3>
-          <button>Upload video</button>
-        </div>
       </div>
 
       <Modal

@@ -4,6 +4,7 @@ import React, { Fragment, useEffect } from "react";
 import { FaXmark } from "react-icons/fa6";
 import { MdCall } from "react-icons/md";
 import { Outlet } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { Frame } from "stompjs";
 import { useEffectOnce } from "usehooks-ts";
 import authApi from "../../api/authApi";
@@ -24,6 +25,7 @@ import {
   updateUserProfile,
 } from "../../redux/globalSlice";
 import { Header, Sidebar } from "../commons";
+import { showInfoModal } from "../modals/CommonModals";
 import stompClient from "../socket/stompClient";
 
 interface MainLayoutProps {}
@@ -32,6 +34,7 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
   useProtectedRoute();
   const dispatch = useAppDispatch();
   const handleResponseError = useHandleResponseError();
+  const navigate = useNavigate();
   const userId = useAppSelector(selectUserId);
   const profile = useAppSelector(selectProfile);
   const callNotification = useAppSelector(selectCallNotifcation);
@@ -67,6 +70,16 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
     if (ok && body) {
       dispatch(updateUserProfile(body));
       dispatch(setLoading("REMOVE"));
+      if (body.level === "ENTRY_TEST") {
+        showInfoModal({
+          title: "Notification",
+          content:
+            "You must take a test to determine your English proficiency level before accessing this feature.",
+          onOk: () => {
+            navigate("/entry-test");
+          },
+        });
+      }
       return;
     }
 
