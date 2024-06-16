@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import authApi from "../../../api/authApi";
 import bg from "../../../assets/images/loginBG.png";
@@ -65,6 +65,7 @@ const defaultValues: RegisterFormProps = {
 };
 
 const Register: React.FunctionComponent<IRegisterProps> = () => {
+  const navigate = useNavigate();
   const {
     handleSubmit,
     register,
@@ -92,6 +93,7 @@ const Register: React.FunctionComponent<IRegisterProps> = () => {
       showSuccessModal({
         content: "Your account has been successfully created!",
         title: "Registration Successful",
+        onOk: () => navigate("/login"),
       });
       reset();
       return;

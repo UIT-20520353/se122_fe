@@ -40,9 +40,11 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
   const callNotification = useAppSelector(selectCallNotifcation);
   const isStartedCall = useAppSelector(selectisStartedCall);
 
+  const socketClient = stompClient.getInstance();
+
   const handleRejectCall = () => {
     dispatch(setCallNotification(null));
-    stompClient.send({
+    socketClient.send({
       chatroomId: callNotification?.chatroomId || 0,
       message: "",
       type: "REJECT",
@@ -51,7 +53,7 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
   };
 
   const handleAcceptCall = () => {
-    stompClient.send({
+    socketClient.send({
       chatroomId: callNotification?.chatroomId || 0,
       message: "",
       type: "ACCEPT",
@@ -90,7 +92,7 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
   useEffectOnce(() => {
     fetchData();
 
-    stompClient.connect(
+    socketClient.connect(
       "http://localhost:8080/ws",
       () => {
         console.log("Websocket connected");
@@ -101,13 +103,13 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
     );
 
     return () => {
-      stompClient.disconnect();
+      socketClient.disconnect();
     };
   });
 
   useEffect(() => {
     if (profile) {
-      stompClient.subcribe(
+      socketClient.subcribe(
         `/user/${profile.id}/notification`,
         (response: Frame) => {
           const message: CallRequestResponse = JSON.parse(response.body);
@@ -125,7 +127,7 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
       );
     }
     return () => {
-      stompClient.ubsubcribe(`/user/${profile?.id || 0}/notification`);
+      socketClient.ubsubcribe(`/user/${profile?.id || 0}/notification`);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile?.id]);
@@ -164,7 +166,7 @@ const MainLayout: React.FunctionComponent<MainLayoutProps> = () => {
             meetingId: isStartedCall,
             micEnabled: true,
             webcamEnabled: true,
-            name: `${profile?.first_name || ""} ${profile?.last_name || ""}`,
+            name: `${profile?.firstName || ""} ${profile?.lastName || ""}`,
             participantId: `${profile?.id || 0}`,
             multiStream: true,
             mode: "CONFERENCE", // "CONFERENCE" || "VIEWER"

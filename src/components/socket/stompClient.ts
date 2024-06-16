@@ -3,8 +3,16 @@ import SockJS from "sockjs-client/dist/sockjs.js";
 import { MessageRequest } from "../../models/message";
 
 class StompClient {
+  private static instance: StompClient | undefined;
   private stompClient: Stomp.Client | null = null;
   private subscriptions: { [key: string]: Stomp.Subscription } = {};
+
+  static getInstance(): StompClient {
+    if (!this.instance) {
+      this.instance = new StompClient();
+    }
+    return this.instance;
+  }
 
   subcribe(topic: string, callback: (message: Stomp.Message) => void): void {
     if (this.stompClient && this.stompClient.connected) {
@@ -63,4 +71,4 @@ class StompClient {
   }
 }
 
-export default new StompClient();
+export default StompClient;

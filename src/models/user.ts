@@ -14,8 +14,8 @@ export interface UserModel {
 
 export interface UserProfileModel {
   id: number;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   address: string;
   gender: string;

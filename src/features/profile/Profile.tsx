@@ -49,8 +49,8 @@ export interface UpdateFormProps {
 
 const initialState: UserProfileModel = {
   id: 0,
-  first_name: "",
-  last_name: "",
+  firstName: "",
+  lastName: "",
   email: "",
   address: "",
   gender: "",
@@ -154,8 +154,8 @@ const Profile: React.FunctionComponent<ProfileProps> = () => {
 
   useEffect(() => {
     if (isOpenChageUserInfo) {
-      setValue("firstName", profile.first_name);
-      setValue("lastName", profile.last_name);
+      setValue("firstName", profile.firstName);
+      setValue("lastName", profile.lastName);
       setValue("address", profile.address);
       setValue("gender", profile.gender === "Male" ? 1 : 0);
       setValue("age", profile.age);
@@ -183,7 +183,7 @@ const Profile: React.FunctionComponent<ProfileProps> = () => {
         <div className="user-info">
           <div className="flex-row items-center gap-2">
             <FaUser style={{ fontSize: "24px" }} />
-            <span className="name">{`${profile.first_name} ${profile.last_name}`}</span>
+            <span className="name">{`${profile.firstName} ${profile.lastName}`}</span>
           </div>
           <div className="flex-row items-center gap-2">
             <MdAlternateEmail style={{ fontSize: "24px" }} />
